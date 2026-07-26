@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abecedario — SIGNOVA</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <style>
+    /* Grid compacto para las 27 letras: recuadros más pequeños que los de una categoría normal */
+    .abc-seccion { padding: 0 5% 80px; max-width: 1200px; margin: 0 auto; }
+    .grid-abc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 14px;
+    }
+    .abc-card {
+      background-color: white;
+      border-radius: var(--radio-md);
+      overflow: hidden;
+      border: 1px solid #eee;
+      box-shadow: var(--sombra-sm);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .abc-card:hover { transform: translateY(-4px); box-shadow: var(--sombra-md); }
+    .abc-video-wrapper {
+      width: 100%;
+      height: 110px;
+      background-color: #111;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .abc-video-wrapper video {
+      width: 100%; height: 100%; max-width: 100%; max-height: 100%;
+      object-fit: contain; display: block;
+    }
+    .abc-label {
+      text-align: center;
+      padding: 8px 6px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--negro);
+      font-family: var(--font-titulos, 'Outfit', sans-serif);
+    }
+    @media (max-width: 700px) {
+      .grid-abc { grid-template-columns: repeat(auto-fill, minmax(95px, 1fr)); gap: 10px; }
+      .abc-video-wrapper { height: 90px; }
+    }
+    /* Ya cubierto por las reglas globales de modo oscuro (.video-wrapper);
+       replicamos el fondo negro fijo del wrapper para .abc-video-wrapper */
+    body.modo-oscuro .abc-video-wrapper { background-color: #000; }
+    body.modo-oscuro .abc-card { background-color: #1a1d27; border-color: #2a2e3b; color: var(--negro); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="../index.html" class="logo">
+    <span class="logo-s">S</span><span class="logo-ig">IG</span><span class="logo-no">NO</span><span class="logo-va">VA</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></a></li>
+    <li><a href="categorias.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Categorías</span></a></li>
+    <li><a href="abecedario.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg><span>Abecedario</span></a></li>
+    <li><a href="../practica/buscar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Buscar</span></a></li>
+    <li><a href="../usuario/cuenta.html" id="nav-cuenta-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span id="nav-cuenta-label">Cuenta</span></a></li>
+    <li class="dropdown">
+      <a href="#" title="Más opciones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg><span>Más</span></a>
+      <ul class="dropdown-menu">
+        <li><a href="../practica/juegos.html">🎮 Juego</a></li>
+        <li><a href="../practica/quiz.html">🧠 Quiz</a></li>
+        <li><a href="../usuario/progreso.html">📊 Progreso</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+<div style="height:3px;background:linear-gradient(90deg,var(--magenta),#a855f7,var(--cyan))"></div>
+
+<div class="cat-header">
+  <a href="../index.html" class="btn-back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Volver al inicio
+  </a>
+  <div class="cat-badge">Alfabeto dactilológico</div>
+  <h1>🔤 Abecedario</h1>
+  <p>Todas las letras del alfabeto en Lengua de Señas Colombiana, de la A a la Z. Toca el video de cada letra para ver cómo se hace.</p>
+</div>
+
+<div class="abc-seccion">
+  <div class="grid-abc">
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/a.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">A</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/b.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">B</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/c.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">C</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/d.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">D</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/e.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">E</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/f.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">F</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/g.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">G</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/h.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">H</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/i.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">I</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/j.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">J</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/k.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">K</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/l.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">L</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/m.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">M</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/n.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">N</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/enie.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">Ñ</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/o.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">O</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/p.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">P</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/q.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">Q</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/r.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">R</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/s.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">S</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/t.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">T</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/u.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">U</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/v.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">V</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/w.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">W</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/x.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">X</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/y.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">Y</div>
+    </div>
+    <div class="abc-card fade-up">
+      <div class="abc-video-wrapper">
+        <video controls preload="metadata">
+          <source src="../assets/videos/abecedario/z.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="abc-label">Z</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>SIGNOVA</strong> — Plataforma de aprendizaje de Lengua de Señas Colombiana &nbsp;·&nbsp; Proyecto Formativo SENA
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+<script>
+  (function() {
+    var sesion = JSON.parse(localStorage.getItem('signova_sesion') || 'null');
+    var label  = document.getElementById('nav-cuenta-label');
+    if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
+  })();
+</script>
+<script src="../assets/js/gamification.js"></script>
+</body>
+</html>

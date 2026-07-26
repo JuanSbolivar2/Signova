@@ -15,7 +15,7 @@
     { id: 'perfil',       icon: '👤', nombre: 'Perfil creado',      desc: 'Creaste tu cuenta en SIGNOVA',                check: s => s.tieneSesion },
     { id: 'primer-quiz',  icon: '🧠', nombre: 'Primer quiz',        desc: 'Completaste tu primer quiz',                  check: s => s.quizJugados > 0 },
     { id: 'puntaje-10',   icon: '⭐', nombre: 'Puntaje 10+',        desc: 'Sacaste 10 puntos o más en un quiz',          check: s => s.quizMejor >= 10 },
-    { id: 'buscador',     icon: '🔍', nombre: 'Usaste el buscador', desc: 'Buscaste una seña en el traductor',           check: s => s.usoBuscador },
+    { id: 'buscador',     icon: '🔍', nombre: 'Usaste el buscador', desc: 'Buscaste una seña en Buscar',           check: s => s.usoBuscador },
     { id: '5-partidas',   icon: '🎮', nombre: '5 partidas',         desc: 'Jugaste 5 partidas en total',                 check: s => s.partidasTotales >= 5 },
     { id: 'explorador',   icon: '🗺️', nombre: 'Explorador',         desc: 'Visitaste 5 categorías de lecciones',         check: s => s.categoriasVisitadas >= 5 },
     { id: 'velocista',    icon: '⏱️', nombre: 'Velocista',          desc: 'Jugaste una ronda de Contrarreloj',           check: s => s.contrarrelojJugado },
@@ -100,7 +100,7 @@
       const nombre = path.split('/').pop().replace('.html', '');
       if (nombre) registrarVisitaCategoria(nombre);
     }
-    if (path.indexOf('traductor.html') !== -1) {
+    if (path.indexOf('buscar.html') !== -1) {
       localStorage.setItem('signova_uso_buscador', '1');
     }
   }
