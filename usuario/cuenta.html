@@ -324,24 +324,24 @@
         <div class="perfil-info">
           <div class="perfil-nombre" id="perfil-nombre">Usuario</div>
           <div class="perfil-correo" id="perfil-correo">correo@ejemplo.com</div>
-          <div class="perfil-badge">🎓 Estudiante de LSC · Plan Gratuito</div>
+          <div class="perfil-badge">Estudiante LSC</div>
         </div>
       </div>
 
       <!-- Estadísticas rápidas -->
       <div class="perfil-grid">
         <div class="perfil-stat-card">
-          <span class="perfil-stat-icon">🧠</span>
+          <span class="perfil-stat-icon"></span>
           <div class="perfil-stat-num" id="stat-quiz">0</div>
           <div class="perfil-stat-label">Mejor puntaje quiz</div>
         </div>
         <div class="perfil-stat-card">
-          <span class="perfil-stat-icon">🎮</span>
+          <span class="perfil-stat-icon"></span>
           <div class="perfil-stat-num" id="stat-juego">0</div>
           <div class="perfil-stat-label">Partidas jugadas</div>
         </div>
         <div class="perfil-stat-card">
-          <span class="perfil-stat-icon">📅</span>
+          <span class="perfil-stat-icon"></span>
           <div class="perfil-stat-num" id="stat-dias">1</div>
           <div class="perfil-stat-label">Días en SIGNOVA</div>
         </div>
@@ -352,56 +352,37 @@
         <div class="perfil-section-title">📋 Actividad reciente</div>
         <div class="actividad-list">
           <div class="actividad-item">
-            <span class="actividad-icon">👋</span>
+            <span class="actividad-icon"></span>
             <span class="actividad-texto">Visitaste la categoría <strong>Saludos</strong></span>
             <span class="actividad-tiempo">Hoy</span>
           </div>
           <div class="actividad-item">
-            <span class="actividad-icon">🔍</span>
+            <span class="actividad-icon"></span>
             <span class="actividad-texto">Buscaste la seña <strong>"hola"</strong> en el buscador</span>
             <span class="actividad-tiempo">Hoy</span>
           </div>
           <div class="actividad-item">
-            <span class="actividad-icon">🎮</span>
+            <span class="actividad-icon"></span>
             <span class="actividad-texto">Completaste una partida del <strong>juego</strong></span>
             <span class="actividad-tiempo">Ayer</span>
           </div>
           <div class="actividad-item">
-            <span class="actividad-icon">🧠</span>
+            <span class="actividad-icon"></span>
             <span class="actividad-texto">Realizaste el <strong>quiz</strong> de señas</span>
             <span class="actividad-tiempo">Hace 2 días</span>
           </div>
         </div>
       </div>
 
-      <!-- Dos columnas: favoritos + ajustes -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <!-- Ajustes -->
+      <div style="margin-bottom:16px;">
 
         <div class="perfil-section" style="margin-bottom:0">
-          <div class="perfil-section-title">⭐ Categorías visitadas</div>
-          <div class="favoritos-grid">
-            <span class="favorito-chip">👋 Saludos</span>
-            <span class="favorito-chip">👨‍👩‍👧 Familia</span>
-            <span class="favorito-chip">😊 Emociones</span>
-            <span class="favorito-chip">📚 Escuela</span>
-            <span class="favorito-chip">🍽️ Comida</span>
-          </div>
-        </div>
-
-        <div class="perfil-section" style="margin-bottom:0">
-          <div class="perfil-section-title">⚙️ Ajustes rápidos</div>
+          <div class="perfil-section-title">Ajustes rápidos</div>
           <div class="ajustes-list">
-            <div class="ajuste-row">
-              <span class="ajuste-label">🔔 Notificaciones</span>
-              <button class="toggle-switch on" onclick="this.classList.toggle('on')" title="Notificaciones"></button>
-            </div>
             <div class="ajuste-row">
               <span class="ajuste-label">🌙 Modo oscuro</span>
               <button class="toggle-switch" onclick="this.classList.toggle('on')" title="Modo oscuro"></button>
-            </div>
-            <div class="ajuste-row">
-              <span class="ajuste-label">🔊 Sonidos</span>
-              <button class="toggle-switch on" onclick="this.classList.toggle('on')" title="Sonidos"></button>
             </div>
           </div>
         </div>
@@ -410,20 +391,7 @@
 
       <!-- Botones de acción -->
       <div class="perfil-section">
-        <div class="perfil-section-title">🚀 Accesos rápidos</div>
         <div class="perfil-acciones">
-          <a href="../lecciones/categorias.html" class="btn-accion primario">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-            Ver categorías
-          </a>
-          <a href="progreso.html" class="btn-accion secundario">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            Mi progreso
-          </a>
-          <a href="../practica/quiz.html" class="btn-accion secundario">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Jugar quiz
-          </a>
           <button class="btn-accion peligro" onclick="cerrarSesion()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             Cerrar sesión
