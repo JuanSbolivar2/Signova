@@ -1,5 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  onAuthStateChanged,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -18,15 +26,14 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-console.log("✅ Firebase conectado correctamente");
-import {
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
+// Funciones de autenticación reexportadas para usarlas en toda la app
 export {
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-signOut
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  onAuthStateChanged,
+  sendPasswordResetEmail
 };
+
+console.log("✅ Firebase conectado correctamente");
