@@ -19,3 +19,14 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 console.log("✅ Firebase conectado correctamente");
+import {
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+export {
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut
+};
