@@ -916,3 +916,83 @@ footer strong {
 .dropdown-menu li.dropdown-menu-sub a {
   padding-left: 24px;
 }
+/* ==========================================================================
+   MODO OSCURO
+   Se activa agregando la clase "modo-oscuro" al <body> (ver gamification.js).
+   Redefinimos las variables de color del sistema de diseño para que la
+   mayoría de los componentes (que ya usan var(--negro), var(--gris), etc.)
+   se adapten automáticamente sin duplicar reglas.
+   ========================================================================== */
+
+body.modo-oscuro {
+  --negro: #f1f5f9;
+  --gris: #a7afbd;
+  --gris-suave: #8b93a4;
+  --gris-texto: #b8c0cc;
+  --azul-fondo: #0d0f16;
+  --blanco: #1a1d27;
+  background-color: var(--azul-fondo);
+}
+
+/* Tarjetas y superficies que tenían fondo blanco fijo (no var()) */
+body.modo-oscuro .navbar,
+body.modo-oscuro .dropdown-menu,
+body.modo-oscuro .section-blanca,
+body.modo-oscuro .info-card,
+body.modo-oscuro .texto-bloque,
+body.modo-oscuro .cat-card,
+body.modo-oscuro .video-card,
+body.modo-oscuro .perfil-section,
+body.modo-oscuro .perfil-stat-card,
+body.modo-oscuro .auth-card,
+body.modo-oscuro .logro-tarjeta,
+body.modo-oscuro .logro-toast,
+body.modo-oscuro .cr-stat,
+body.modo-oscuro .cr-tarjeta,
+body.modo-oscuro .dl-tarjeta,
+body.modo-oscuro .dl-stat,
+body.modo-oscuro .dl-btn-sec,
+body.modo-oscuro .cat-btn,
+body.modo-oscuro .card.flip,
+body.modo-oscuro .juego-card,
+body.modo-oscuro .option,
+body.modo-oscuro .chip-sug,
+body.modo-oscuro .resultado-card,
+body.modo-oscuro .stat-card,
+body.modo-oscuro .detalle-section {
+  background-color: #1a1d27;
+  border-color: #2a2e3b;
+  color: var(--negro);
+}
+
+body.modo-oscuro .navbar {
+  background-color: rgba(18, 20, 28, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.modo-oscuro .nav-links a { color: #cbd5e1; }
+body.modo-oscuro .nav-links a:hover { background-color: #232733; color: var(--cyan); }
+body.modo-oscuro .nav-links a.active { background-color: #2a2340; }
+
+body.modo-oscuro .campo input,
+body.modo-oscuro .search-input {
+  background-color: #232733;
+  border-color: #333846;
+  color: #e5e7eb;
+}
+body.modo-oscuro .campo input::placeholder,
+body.modo-oscuro .search-input::placeholder { color: #6b7280; }
+
+body.modo-oscuro .btn-accion.secundario { background-color: #232733; }
+body.modo-oscuro .ajuste-row { border-bottom-color: #2a2e3b; }
+body.modo-oscuro .info-card,
+body.modo-oscuro .texto-bloque { border-color: transparent; }
+
+/* El footer ya era oscuro por diseño (usa var(--negro) como fondo);
+   lo fijamos explícitamente para que no se invierta con --negro. */
+body.modo-oscuro footer {
+  background-color: #05060a;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+body.modo-oscuro .video-wrapper { background-color: #000; }

@@ -133,6 +133,22 @@
       : '';
   }
 
+  /* ---- Modo oscuro (persistente en todo el sitio) ----------------------- */
+  function modoOscuroActivo() {
+    return localStorage.getItem('signova_modo_oscuro') === '1';
+  }
+
+  function aplicarModoOscuro(activo) {
+    document.body.classList.toggle('modo-oscuro', !!activo);
+  }
+
+  function alternarModoOscuro() {
+    const activo = !modoOscuroActivo();
+    localStorage.setItem('signova_modo_oscuro', activo ? '1' : '0');
+    aplicarModoOscuro(activo);
+    return activo;
+  }
+
   /* ---- Toast de logro desbloqueado -------------------------------------- */
   function mostrarToastLogro(logro) {
     const toast = document.createElement('div');
@@ -162,9 +178,12 @@
   /* ---- Inicialización ---------------------------------------------- */
   function init() {
     detectarPagina();
+    aplicarModoOscuro(modoOscuroActivo());
     const racha = actualizarRacha();
     const { nuevos } = evaluarLogros();
     renderNavbarRacha(racha);
+    const statRacha = document.getElementById('stat-racha');
+    if (statRacha) statRacha.textContent = racha;
     actualizarEtiquetaCuenta();
     nuevos.forEach(mostrarToastLogro);
   }
@@ -186,5 +205,7 @@
     registrarHistorial,
     evaluarLogros,
     mostrarToastLogro,
+    modoOscuroActivo,
+    alternarModoOscuro,
   };
 })();
