@@ -458,11 +458,41 @@
 
   </section>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const sesion = JSON.parse(localStorage.getItem('signova_sesion') || 'null');
-      if (sesion) mostrarPerfil(sesion);
-      actualizarNavLabel();
+  <script type="module">
+    import {
+      auth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      updateProfile,
+      onAuthStateChanged,
+      sendPasswordResetEmail
+    } from '../assets/firebase/firebase.js';
+
+    // Traduce los códigos de error de Firebase a mensajes en español
+    function mensajeError(codigo) {
+      const mapa = {
+        'auth/email-already-in-use': 'Ese correo ya está registrado.',
+        'auth/invalid-email':        'El correo no es válido.',
+        'auth/weak-password':        'La contraseña es demasiado débil.',
+        'auth/user-not-found':       'Correo o contraseña incorrectos.',
+        'auth/wrong-password':       'Correo o contraseña incorrectos.',
+        'auth/invalid-credential':   'Correo o contraseña incorrectos.',
+        'auth/too-many-requests':    'Demasiados intentos. Intenta más tarde.',
+      };
+      return mapa[codigo] || 'Ocurrió un error. Intenta de nuevo.';
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        mostrarPerfil({ nombre: user.displayName || 'Usuario', correo: user.email });
+        actualizarNavLabel(user.displayName);
+      } else {
+        document.getElementById('perfil-wrap').style.display = 'none';
+        document.getElementById('auth-card').style.display   = 'block';
+        const label = document.getElementById('nav-cuenta-label');
+        if (label) label.textContent = 'Cuenta';
+      }
       const toggleOscuro = document.getElementById('toggle-modo-oscuro');
       if (toggleOscuro && window.SIGNOVA) {
         toggleOscuro.classList.toggle('on', window.SIGNOVA.modoOscuroActivo());
@@ -490,10 +520,9 @@
       document.getElementById('stat-dias').textContent = dias;
     }
 
-    function actualizarNavLabel() {
-      const sesion = JSON.parse(localStorage.getItem('signova_sesion') || 'null');
-      const label  = document.getElementById('nav-cuenta-label');
-      if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
+    function actualizarNavLabel(nombreCompleto) {
+      const label = document.getElementById('nav-cuenta-label');
+      if (nombreCompleto && label) label.textContent = nombreCompleto.split(' ')[0];
     }
 
     function switchTab(tab) {
@@ -511,24 +540,17 @@
     function showError(id, msg)   { const el=document.getElementById(id); el.textContent=msg; el.className='alert alert-error show'; }
     function showSuccess(id, msg) { const el=document.getElementById(id); el.textContent=msg; el.className='alert alert-success show'; }
 
-    async function postPHP(url, datos) {
-      const body = new URLSearchParams(datos);
-      const res  = await fetch(url, { method: 'POST', body });
-      return res.json();
-    }
-
     async function iniciarSesion() {
       limpiarAlertas();
       const correo = document.getElementById('login-correo').value.trim();
       const pass   = document.getElementById('login-pass').value;
       if (!correo || !pass) { showError('login-error', 'Completa todos los campos.'); return; }
       try {
-        const data = await postPHP('../auth/api_login.php', { correo, contrasena: pass });
-        if (!data.ok) { showError('login-error', data.msg); return; }
-        localStorage.setItem('signova_sesion', JSON.stringify({ nombre: data.nombre, correo: data.correo }));
-        mostrarPerfil(data);
-        actualizarNavLabel();
-      } catch(e) { showError('login-error', 'Error de conexión. Verifica que XAMPP esté activo.'); }
+        await signInWithEmailAndPassword(auth, correo, pass);
+        // onAuthStateChanged se encarga de mostrar el perfil
+      } catch (e) {
+        showError('login-error', mensajeError(e.code));
+      }
     }
 
     async function registrar() {
@@ -542,30 +564,40 @@
       if (pass.length < 6)                            { showError('registro-error', 'Mínimo 6 caracteres en la contraseña.'); return; }
       if (pass !== confirmar)                         { showError('registro-error', 'Las contraseñas no coinciden.'); return; }
       try {
-        const data = await postPHP('../auth/api_registro.php', { nombre, correo, contrasena: pass, confirmar });
-        if (!data.ok) { showError('registro-error', data.msg); return; }
-        localStorage.setItem('signova_sesion', JSON.stringify({ nombre: data.nombre, correo: data.correo }));
-        mostrarPerfil(data);
-        actualizarNavLabel();
-      } catch(e) { showError('registro-error', 'Error de conexión. Verifica que XAMPP esté activo.'); }
+        const cred = await createUserWithEmailAndPassword(auth, correo, pass);
+        await updateProfile(cred.user, { displayName: nombre });
+        // onAuthStateChanged se encarga de mostrar el perfil, pero displayName
+        // puede tardar un instante en reflejarse ahí, así que lo mostramos ya:
+        mostrarPerfil({ nombre, correo });
+        actualizarNavLabel(nombre);
+      } catch (e) {
+        showError('registro-error', mensajeError(e.code));
+      }
     }
 
-    function recuperar() {
+    async function recuperar() {
       limpiarAlertas();
       const correo = document.getElementById('rec-correo').value.trim();
       if (!correo) { showError('rec-error', 'Ingresa tu correo.'); return; }
-      showSuccess('rec-exito', 'Si el correo existe en nuestra base de datos, recibirás instrucciones. Contacta al administrador para recuperar tu contraseña.');
+      try {
+        await sendPasswordResetEmail(auth, correo);
+        showSuccess('rec-exito', 'Si el correo existe, te enviamos un enlace para restablecer tu contraseña.');
+      } catch (e) {
+        showError('rec-error', mensajeError(e.code));
+      }
     }
 
     async function cerrarSesion() {
-      await fetch('../auth/api_logout.php').catch(() => {});
-      localStorage.removeItem('signova_sesion');
-      document.getElementById('perfil-wrap').style.display = 'none';
-      document.getElementById('auth-card').style.display   = 'block';
-      document.getElementById('nav-cuenta-label').textContent = 'Cuenta';
+      await signOut(auth);
       limpiarAlertas();
       switchTab('login');
     }
+
+    // Los atributos onclick del HTML necesitan estas funciones en window,
+    // ya que este script es un módulo (sus funciones no son globales por defecto).
+    Object.assign(window, {
+      alternarOscuro, switchTab, iniciarSesion, registrar, recuperar, cerrarSesion
+    });
   </script>
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>

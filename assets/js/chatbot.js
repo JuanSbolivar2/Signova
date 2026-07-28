@@ -83,7 +83,7 @@
       r: 'La identidad visual de SIGNOVA usa un degradado de magenta, morado y cian, tanto en el logo como en los acentos de la interfaz.' },
 
     /* ---- 4. Categorías / lecciones ---- */
-    { p: ['que son las categorias', 'como funcionan las categorias', 'para que sirven las categorias'],
+    { p: ['que son las categorias', 'como funcionan las categorias', 'para que sirven las categorias', 'que hay en categorias', 'categorias', 'que categorias hay'],
       r: 'Las categorías agrupan señas por tema (Saludos, Familia, Colores, etc.). Cada una tiene una lista de videos cortos con la seña de cada palabra, para que aprendas por bloques de vocabulario relacionado.' },
     { p: ['cuantas categorias hay', 'cuantos temas hay disponibles'],
       r: 'Actualmente hay 11 categorías: Saludos, Familia, Emociones, Profesiones, Escuela, Vida diaria, Comida, Colores, Cuerpo humano y Animales, además del Abecedario como sección aparte.' },
@@ -397,8 +397,6 @@
       .sv-cb-enviar:disabled { opacity: .5; cursor: default; }
       .sv-cb-enviar svg { width: 16px; height: 16px; }
 
-      .sv-cb-footer-nota { text-align: center; font-size: 9.5px; color: #9ca3af; padding: 4px 0 8px; flex-shrink: 0; background: white; }
-
       @media (max-width: 420px) {
         .sv-cb-panel { right: 4vw; left: 4vw; width: auto; bottom: 88px; }
         .sv-cb-burbuja { right: 16px; bottom: 16px; }
@@ -412,7 +410,6 @@
       body.modo-oscuro .sv-cb-chip:hover { background: #2a2e3b; }
       body.modo-oscuro .sv-cb-form { background: #1a1d27; border-top-color: #2a2e3b; }
       body.modo-oscuro .sv-cb-input { background: #232733; border-color: #333846; color: #e5e7eb; }
-      body.modo-oscuro .sv-cb-footer-nota { background: #1a1d27; }
     `;
     document.head.appendChild(estilo);
   }
@@ -438,7 +435,6 @@
         <div class="sv-cb-header-avatar">🤖</div>
         <div class="sv-cb-header-texto">
           <strong>Asistente SIGNOVA</strong>
-          <span>Responde con reglas · sin IA</span>
         </div>
         <button type="button" class="sv-cb-cerrar" title="Cerrar" id="sv-cb-cerrar">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -452,7 +448,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
       </form>
-      <div class="sv-cb-footer-nota">Bot basado en reglas · puede no entender todo</div>
     `;
 
     document.body.appendChild(burbuja);
@@ -496,12 +491,14 @@
       } else {
         historial.forEach(function (m) { pintarMensaje(m.rol, m.texto); });
       }
-      pintarChips();
+      const yaPregunto = historial.some(function (m) { return m.rol === 'user'; });
+      if (!yaPregunto) pintarChips();
     }
 
     function enviarPregunta(texto) {
       const limpio = texto.trim();
       if (!limpio) return;
+      zonaChips.innerHTML = '';
       pintarMensaje('user', limpio);
       historial.push({ rol: 'user', texto: limpio });
 
