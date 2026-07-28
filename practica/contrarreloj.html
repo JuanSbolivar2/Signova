@@ -335,9 +335,7 @@
     if (mejorCombo > comboPrevio) localStorage.setItem('contrarreloj_combo_max', mejorCombo);
 
     if (window.SIGNOVA) {
-      SIGNOVA.registrarHistorial('⏱️', `Contrarreloj: ${puntaje} puntos`, puntaje);
-      const { nuevos } = SIGNOVA.evaluarLogros();
-      nuevos.forEach(SIGNOVA.mostrarToastLogro);
+      SIGNOVA.registrarPractica('⏱️', `Contrarreloj: ${puntaje} puntos`, puntaje);
     }
   }
 
@@ -347,6 +345,8 @@
     if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
   })();
 </script>
+
+<script type="module" src="../assets/js/cloud-sync.js"></script>
 
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>

@@ -376,6 +376,7 @@
     }
 
     function mostrarTarjeta(clave, datos) {
+      if (window.SIGNOVA) SIGNOVA.registrarBusqueda(datos.label);
       resultado.innerHTML = `
         <div class="resultado-card">
           <div class="resultado-video-wrap">
@@ -462,6 +463,8 @@
       if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
     })();
   </script>
+
+<script type="module" src="../assets/js/cloud-sync.js"></script>
 
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>

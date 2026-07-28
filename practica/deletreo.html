@@ -541,12 +541,12 @@
     localStorage.setItem('deletreo_jugadas', jugadas + 1);
 
     if (window.SIGNOVA) {
-      SIGNOVA.registrarHistorial('🔤', `Deletreo LSC: ${puntaje} puntos`, puntaje);
-      const { nuevos } = SIGNOVA.evaluarLogros();
-      nuevos.forEach(SIGNOVA.mostrarToastLogro);
+      SIGNOVA.registrarPractica('🔤', `Deletreo LSC: ${puntaje} puntos`, puntaje);
     }
   }
 </script>
+
+<script type="module" src="../assets/js/cloud-sync.js"></script>
 
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>

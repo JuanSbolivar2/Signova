@@ -302,9 +302,7 @@ function finalizarPartida() {
   localStorage.setItem('games_played', jugadas + 1);
 
   if (window.SIGNOVA) {
-    SIGNOVA.registrarHistorial('🎮', `Juego de memoria (${currentCat}): ${attempts} intentos`, totalPairs);
-    const { nuevos } = SIGNOVA.evaluarLogros();
-    nuevos.forEach(SIGNOVA.mostrarToastLogro);
+    SIGNOVA.registrarPractica('🎮', `Juego de memoria (${currentCat}): ${attempts} intentos`, totalPairs);
   }
 
   const overlay = document.createElement('div');
@@ -333,6 +331,7 @@ startGame();
     if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
   })();
 </script>
+<script type="module" src="../assets/js/cloud-sync.js"></script>
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>
 </body>

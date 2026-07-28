@@ -346,9 +346,7 @@ function showFinal() {
   localStorage.setItem('quiz_played', Number(played) + 1);
 
   if (window.SIGNOVA) {
-    SIGNOVA.registrarHistorial('🧠', `Quiz de ${currentCat}: ${score}/${quizData.length}`, score);
-    const { nuevos } = SIGNOVA.evaluarLogros();
-    nuevos.forEach(SIGNOVA.mostrarToastLogro);
+    SIGNOVA.registrarPractica('🧠', `Quiz de ${currentCat}: ${score}/${quizData.length}`, score);
   }
 
   const total = quizData.length;
@@ -380,6 +378,7 @@ startQuiz();
     if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
   })();
 </script>
+<script type="module" src="../assets/js/cloud-sync.js"></script>
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>
 </body>

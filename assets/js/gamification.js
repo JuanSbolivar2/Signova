@@ -1,16 +1,24 @@
 /* ==========================================================================
    gamification.js — SIGNOVA
-   Motor central de gamificación: racha diaria, XP/nivel y logros.
-   Se incluye en TODAS las páginas para que la racha se vea en el navbar
-   sin importar en qué página estés, y para que los logros se evalúen
-   siempre con los mismos datos (localStorage) sin duplicar lógica.
+   Motor central de gamificación: racha, días conectado, XP/nivel, logros
+   y actividad reciente. Se incluye en TODAS las páginas.
+
+   Reglas de negocio (2ª versión):
+   - "Racha" solo sube cuando la persona TERMINA un quiz o un juego
+     (no por visitar cualquier página). Ver registrarPractica().
+   - "Días en SIGNOVA" cuenta días reales de conexión (no tiempo
+     transcurrido desde el registro). Ver registrarDiaConexion().
+   - "Actividad reciente" se guarda siempre que: termina un quiz/juego,
+     visita una categoría, o usa el buscador con éxito.
+   - Todo sigue viviendo en localStorage (funciona para invitados sin
+     cuenta). Si cloud-sync.js detecta sesión de Firebase, esos mismos
+     datos también se reflejan y se guardan en Firestore.
    ========================================================================== */
 
 (function () {
   'use strict';
 
   /* ---- Catálogo de logros -------------------------------------------- */
-  /* Cada logro sabe evaluarse solo a partir de "stats" (ver obtenerStats). */
   const LOGROS = [
     { id: 'perfil',       icon: '👤', nombre: 'Perfil creado',      desc: 'Creaste tu cuenta en SIGNOVA',                check: s => s.tieneSesion },
     { id: 'primer-quiz',  icon: '🧠', nombre: 'Primer quiz',        desc: 'Completaste tu primer quiz',                  check: s => s.quizJugados > 0 },
@@ -30,6 +38,7 @@
 
   /* ---- Lectura de estado ------------------------------------------------ */
   function num(key) { return parseInt(localStorage.getItem(key) || '0', 10) || 0; }
+  function arr(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { return []; } }
 
   function obtenerStats() {
     const gamesPlayed = num('games_played');
@@ -39,10 +48,12 @@
       tieneSesion:        !!localStorage.getItem('signova_sesion'),
       quizJugados:        quizPlayed,
       quizMejor:          num('quiz_best'),
+      partidasJugadas:    gamesPlayed + deletreoJug,       // Juego + Contrarreloj + Deletreo
       partidasTotales:    quizPlayed + gamesPlayed + deletreoJug,
-      categoriasVisitadas: JSON.parse(localStorage.getItem('signova_categorias_visitadas') || '[]').length,
+      categoriasVisitadas: arr('signova_categorias_visitadas').length,
       usoBuscador:        localStorage.getItem('signova_uso_buscador') === '1',
       racha:              num('signova_racha_count'),
+      diasConectado:      arr('signova_dias_conectado').length || 1,
       contrarrelojJugado: !!localStorage.getItem('contrarreloj_best'),
       comboMax:           num('contrarreloj_combo_max'),
       deletreoJugado:     !!localStorage.getItem('deletreo_best'),
@@ -65,14 +76,15 @@
     return { nivel, progreso, porcentaje: Math.round((progreso / XP_POR_NIVEL) * 100) };
   }
 
-  /* ---- Racha diaria ------------------------------------------------- */
+  /* ---- Fechas ---------------------------------------------------------- */
   function hoyISO(offsetDias) {
     const d = new Date();
     d.setDate(d.getDate() + (offsetDias || 0));
     return d.toISOString().slice(0, 10);
   }
 
-  function actualizarRacha() {
+  /* ---- Racha: SOLO sube cuando se llama desde registrarPractica() ------ */
+  function bumpRacha() {
     const hoy = hoyISO(0);
     const ultima = localStorage.getItem('signova_racha_fecha');
     let count = num('signova_racha_count');
@@ -85,38 +97,83 @@
     return count;
   }
 
+  /* ---- Días en SIGNOVA: cuenta días reales de conexión, no tiempo
+     transcurrido. Se llama en cada carga de página. ----------------------- */
+  function registrarDiaConexion() {
+    const hoy = hoyISO(0);
+    const dias = arr('signova_dias_conectado');
+    if (dias.indexOf(hoy) === -1) {
+      dias.push(hoy);
+      localStorage.setItem('signova_dias_conectado', JSON.stringify(dias));
+      return true; // fue un día nuevo
+    }
+    return false;
+  }
+
   /* ---- Categorías visitadas / uso del buscador ------------------------ */
   function registrarVisitaCategoria(nombre) {
-    const arr = JSON.parse(localStorage.getItem('signova_categorias_visitadas') || '[]');
-    if (arr.indexOf(nombre) === -1) {
-      arr.push(nombre);
-      localStorage.setItem('signova_categorias_visitadas', JSON.stringify(arr));
+    const arreglo = arr('signova_categorias_visitadas');
+    if (arreglo.indexOf(nombre) === -1) {
+      arreglo.push(nombre);
+      localStorage.setItem('signova_categorias_visitadas', JSON.stringify(arreglo));
     }
   }
+
+  const NOMBRES_CATEGORIA = {
+    colores: 'Colores', animales: 'Animales', comida: 'Comida', cuerpo: 'Cuerpo humano',
+    emociones: 'Emociones', escuela: 'Escuela', familia: 'Familia', profesiones: 'Profesiones',
+    saludos: 'Saludos', vidadiaria: 'Vida diaria', abecedario: 'Abecedario',
+  };
 
   function detectarPagina() {
     const path = location.pathname;
     if (path.indexOf('/lecciones/') !== -1 && path.indexOf('categorias.html') === -1) {
-      const nombre = path.split('/').pop().replace('.html', '');
-      if (nombre) registrarVisitaCategoria(nombre);
-    }
-    if (path.indexOf('buscar.html') !== -1) {
-      localStorage.setItem('signova_uso_buscador', '1');
+      const clave = path.split('/').pop().replace('.html', '');
+      if (clave) {
+        registrarVisitaCategoria(clave);
+        registrarHistorial('📖', `Visitaste la categoría ${NOMBRES_CATEGORIA[clave] || clave}`, '');
+      }
     }
   }
 
-  /* ---- Historial unificado -------------------------------------------- */
+  /* Se llama desde buscar.html cuando SÍ se encuentra una seña. */
+  function registrarBusqueda(palabra) {
+    const yaUsado = localStorage.getItem('signova_uso_buscador') === '1';
+    localStorage.setItem('signova_uso_buscador', '1');
+    if (!yaUsado) {
+      const { nuevos } = evaluarLogros();
+      nuevos.forEach(mostrarToastLogro);
+    }
+    registrarHistorial('🔍', palabra ? `Buscaste la seña "${palabra}"` : 'Usaste el buscador de señas', '');
+    sincronizarNube();
+  }
+
+  /* ---- Historial unificado (Actividad reciente) ------------------------ */
   function registrarHistorial(icon, texto, valor) {
-    const h = JSON.parse(localStorage.getItem('signova_historial') || '[]');
-    h.push({ icon, texto, valor, fecha: new Date().toLocaleDateString('es-CO') });
+    const h = arr('signova_historial');
+    h.push({ icon, texto, valor, fechaISO: hoyISO(0) });
     if (h.length > 25) h.shift();
     localStorage.setItem('signova_historial', JSON.stringify(h));
+  }
+
+  /* Punto de entrada único para "terminar un quiz o un juego": sube la
+     racha, guarda la actividad, revisa logros y sincroniza con la nube.
+     Los 4 juegos (Quiz, Juego de memoria, Contrarreloj, Deletreo) llaman
+     esta función al terminar la partida, en vez de tocar racha a mano. */
+  function registrarPractica(icon, texto, valor) {
+    registrarHistorial(icon, texto, valor);
+    const racha = bumpRacha();
+    const { nuevos } = evaluarLogros();
+    renderTodo();
+    nuevos.forEach(mostrarToastLogro);
+    sincronizarNube();
+    return racha;
   }
 
   /* ---- Evaluación de logros + detección de "nuevos" -------------------- */
   function evaluarLogros() {
     const stats = obtenerStats();
-    const previos = JSON.parse(localStorage.getItem('signova_logros_desbloqueados') || '[]');
+    const previos = arr('signova_logros_desbloqueados');
     const resultado = LOGROS.map(l => ({ ...l, desbloqueado: !!l.check(stats) }));
     const desbloqueadosAhora = resultado.filter(l => l.desbloqueado).map(l => l.id);
     const nuevos = resultado.filter(l => l.desbloqueado && previos.indexOf(l.id) === -1);
@@ -124,13 +181,72 @@
     return { resultado, nuevos, stats };
   }
 
-  /* ---- Render del badge de racha en el navbar -------------------------- */
+  /* ---- Sincronización con Firestore (si hay sesión) --------------------- */
+  function sincronizarNube() {
+    if (window.SIGNOVA_CLOUD && window.SIGNOVA_CLOUD.listo) {
+      window.SIGNOVA_CLOUD.subir();
+    }
+  }
+
+  /* ---- Render: navbar (racha), tarjetas de Cuenta y actividad reciente -- */
   function renderNavbarRacha(count) {
     const slot = document.getElementById('navbar-racha-slot');
     if (!slot) return;
     slot.innerHTML = count > 0
       ? `<span class="racha-badge navbar-racha" title="Racha de días practicando en SIGNOVA">🔥 ${count} ${count === 1 ? 'día' : 'días'}</span>`
       : '';
+  }
+
+  function etiquetaFecha(fechaISO) {
+    if (!fechaISO) return '';
+    const hoy = hoyISO(0);
+    const ayer = hoyISO(-1);
+    if (fechaISO === hoy) return 'Hoy';
+    if (fechaISO === ayer) return 'Ayer';
+    const dias = Math.round((new Date(hoy) - new Date(fechaISO)) / 86400000);
+    return dias > 0 ? `Hace ${dias} días` : fechaISO;
+  }
+
+  function renderActividadReciente() {
+    const lista = document.getElementById('actividad-lista');
+    if (!lista) return;
+    const historial = arr('signova_historial').slice(-6).reverse();
+    if (historial.length === 0) {
+      lista.innerHTML = `
+        <div class="actividad-item">
+          <span class="actividad-icon">✨</span>
+          <span class="actividad-texto">Todavía no tienes actividad. Juega un quiz, visita una categoría o usa el buscador.</span>
+          <span class="actividad-tiempo"></span>
+        </div>`;
+      return;
+    }
+    lista.innerHTML = historial.map(item => `
+      <div class="actividad-item">
+        <span class="actividad-icon">${item.icon || '⭐'}</span>
+        <span class="actividad-texto">${item.texto}</span>
+        <span class="actividad-tiempo">${etiquetaFecha(item.fechaISO)}</span>
+      </div>`).join('');
+  }
+
+  function renderStatsCuenta(stats) {
+    const mapa = {
+      'stat-racha': stats.racha,
+      'stat-quiz':  stats.quizMejor,
+      'stat-juego': stats.partidasJugadas,
+      'stat-dias':  stats.diasConectado,
+    };
+    Object.entries(mapa).forEach(([id, valor]) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = valor;
+    });
+  }
+
+  function renderTodo() {
+    const stats = obtenerStats();
+    renderNavbarRacha(stats.racha);
+    renderStatsCuenta(stats);
+    renderActividadReciente();
+    return stats;
   }
 
   /* ---- Modo oscuro (persistente en todo el sitio) ----------------------- */
@@ -167,8 +283,7 @@
     }, 4200);
   }
 
-  /* ---- Etiqueta de nombre de usuario en el navbar (reemplaza el snippet
-     repetido que había suelto al final de cada página) -------------------- */
+  /* ---- Etiqueta de nombre de usuario en el navbar ----------------------- */
   function actualizarEtiquetaCuenta() {
     const sesion = JSON.parse(localStorage.getItem('signova_sesion') || 'null');
     const label = document.getElementById('nav-cuenta-label');
@@ -179,13 +294,11 @@
   function init() {
     detectarPagina();
     aplicarModoOscuro(modoOscuroActivo());
-    const racha = actualizarRacha();
-    const { nuevos } = evaluarLogros();
-    renderNavbarRacha(racha);
-    const statRacha = document.getElementById('stat-racha');
-    if (statRacha) statRacha.textContent = racha;
+    const esDiaNuevo = registrarDiaConexion();
+    evaluarLogros();
+    renderTodo();
     actualizarEtiquetaCuenta();
-    nuevos.forEach(mostrarToastLogro);
+    if (esDiaNuevo) sincronizarNube();
   }
 
   if (document.readyState === 'loading') {
@@ -194,18 +307,34 @@
     init();
   }
 
+  /* Cuando cloud-sync.js termina de leer/fusionar Firestore (o detecta que
+     no hay sesión), volvemos a pintar todo con los datos ya al día.
+     También reintentamos "hoy me conecté" por si el día de hoy se había
+     registrado localmente ANTES de que llegaran los datos de la nube
+     (la fusión pudo haber traído un arreglo de días sin el de hoy). */
+  document.addEventListener('signova:cloud-listo', function () {
+    const esDiaNuevo = registrarDiaConexion();
+    evaluarLogros();
+    renderTodo();
+    actualizarEtiquetaCuenta();
+    if (esDiaNuevo) sincronizarNube();
+  });
+
   /* ---- API pública ---------------------------------------------------- */
   window.SIGNOVA = {
     LOGROS,
     obtenerStats,
     calcularXP,
     obtenerNivel,
-    actualizarRacha,
     registrarVisitaCategoria,
     registrarHistorial,
+    registrarPractica,
+    registrarBusqueda,
     evaluarLogros,
     mostrarToastLogro,
     modoOscuroActivo,
     alternarModoOscuro,
+    renderTodo,
+    sincronizarNube,
   };
 })();

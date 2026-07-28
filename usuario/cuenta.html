@@ -75,6 +75,33 @@
     .alert.show { display:block; }
     .alert-error   { background:#fef2f2; border:1px solid #fecaca; color:#dc2626; }
     .alert-success { background:#f0fdf4; border:1px solid #bbf7d0; color:#16a34a; }
+    .alert-warning { background:#fffbeb; border:1px solid #fde68a; color:#b45309; }
+
+    .btn-google {
+      width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 13px; background: #fff; color: #3c4043; border: 1.5px solid #dadce0;
+      border-radius: 12px; font-size: 0.95rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: background 0.2s, box-shadow 0.2s; margin-bottom: 18px;
+    }
+    .btn-google:hover  { background: #f8f9fa; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .btn-google:active { transform: scale(0.98); }
+
+    .divisor-o {
+      display: flex; align-items: center; gap: 12px; margin: 4px 0 18px;
+      color: var(--gris-suave); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .divisor-o::before, .divisor-o::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
+
+    .banner-verificar {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      background: #fffbeb; border: 1px solid #fde68a; color: #92400e;
+      border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; font-size: 0.9rem;
+    }
+    .banner-verificar button {
+      background: #b45309; color: #fff; border: none; border-radius: 8px;
+      padding: 7px 14px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+    .banner-verificar button:hover { background: #92400e; }
     .hint { font-size:0.76rem; color:#bbb; margin-top:4px; padding-left:4px; }
 
     /* ── PANEL DE SESIÓN ACTIVA ────────────────────────────── */
@@ -317,6 +344,11 @@
     <!-- ── PANEL SESIÓN ACTIVA ──────────────────────────────── -->
     <div class="perfil-wrap" id="perfil-wrap">
 
+      <div class="banner-verificar" id="banner-verificar" style="display:none">
+        <span>✉️ Todavía no has verificado tu correo. Revisa tu bandeja de entrada (y spam).</span>
+        <button onclick="reenviarVerificacion()" id="btn-reenviar-verificacion">Reenviar correo</button>
+      </div>
+
       <!-- Header con avatar y nombre -->
       <div class="perfil-header">
         <div class="perfil-avatar" id="perfil-avatar">U</div>
@@ -354,27 +386,8 @@
       <!-- Actividad reciente -->
       <div class="perfil-section">
         <div class="perfil-section-title">📋 Actividad reciente</div>
-        <div class="actividad-list">
-          <div class="actividad-item">
-            <span class="actividad-icon"></span>
-            <span class="actividad-texto">Visitaste la categoría <strong>Saludos</strong></span>
-            <span class="actividad-tiempo">Hoy</span>
-          </div>
-          <div class="actividad-item">
-            <span class="actividad-icon"></span>
-            <span class="actividad-texto">Buscaste la seña <strong>"hola"</strong> en el buscador</span>
-            <span class="actividad-tiempo">Hoy</span>
-          </div>
-          <div class="actividad-item">
-            <span class="actividad-icon"></span>
-            <span class="actividad-texto">Completaste una partida del <strong>juego</strong></span>
-            <span class="actividad-tiempo">Ayer</span>
-          </div>
-          <div class="actividad-item">
-            <span class="actividad-icon"></span>
-            <span class="actividad-texto">Realizaste el <strong>quiz</strong> de señas</span>
-            <span class="actividad-tiempo">Hace 2 días</span>
-          </div>
+        <div class="actividad-list" id="actividad-lista">
+          <!-- Se llena dinámicamente desde gamification.js (SIGNOVA.renderTodo) -->
         </div>
       </div>
 
@@ -382,7 +395,7 @@
       <div style="margin-bottom:16px;">
 
         <div class="perfil-section" style="margin-bottom:0">
-          <div class="perfil-section-title">Ajustes rápidos</div>
+          <div class="perfil-section-title">⚙️ Ajustes rápidos</div>
           <div class="ajustes-list">
             <div class="ajuste-row">
               <span class="ajuste-label">🌙 Modo oscuro</span>
@@ -407,6 +420,12 @@
 
     <!-- ── CARD AUTH ─────────────────────────────────────────── -->
     <div class="auth-card" id="auth-card">
+      <div class="alert alert-error" id="google-error"></div>
+      <button class="btn-google" onclick="continuarConGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.4-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 18.9 12 24 12c3.1 0 5.8 1.1 8 3l6-6C34.5 5.1 29.5 3 24 3 16.3 3 9.7 7.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.4 0 10.3-1.8 14-4.9l-6.5-5.5c-2 1.5-4.6 2.4-7.5 2.4-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.6 40.5 16.2 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.5 5.5C41.5 36 45 30.5 45 24c0-1.4-.1-2.7-.4-3.5z"/></svg>
+        Continuar con Google
+      </button>
+      <div class="divisor-o">o con tu correo</div>
       <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('login')">Iniciar sesión</button>
         <button class="tab-btn"        onclick="switchTab('registro')">Crear cuenta</button>
@@ -466,7 +485,10 @@
       signOut,
       updateProfile,
       onAuthStateChanged,
-      sendPasswordResetEmail
+      sendPasswordResetEmail,
+      sendEmailVerification,
+      GoogleAuthProvider,
+      signInWithPopup
     } from '../assets/firebase/firebase.js';
 
     // Traduce los códigos de error de Firebase a mensajes en español
@@ -483,10 +505,41 @@
       return mapa[codigo] || 'Ocurrió un error. Intenta de nuevo.';
     }
 
+    /* ---- Validación de correo real ------------------------------------
+       Dos capas:
+       1. Lista de proveedores de correo reales conocidos (Gmail, Outlook,
+          Yahoo, iCloud, etc.) — si el dominio no está aquí, se rechaza.
+       2. Por si en el futuro quieres abrirlo a más dominios (por ejemplo
+          correos institucionales @sena.edu.co), basta con agregarlos aquí,
+          o cambiar a un enfoque de "lista negra" de correos temporales.
+       La verificación REAL de que el correo existe y le pertenece a la
+       persona la hace sendEmailVerification() más abajo, que manda un
+       enlace de confirmación al correo. Eso es lo que de verdad prueba
+       que el correo es legítimo, no solo el nombre del dominio. -------- */
+    const PROVEEDORES_PERMITIDOS = [
+      'gmail.com', 'googlemail.com',
+      'outlook.com', 'outlook.es', 'hotmail.com', 'hotmail.es', 'live.com', 'msn.com',
+      'yahoo.com', 'yahoo.es',
+      'icloud.com', 'me.com', 'mac.com',
+      'protonmail.com', 'proton.me',
+      'gmx.com', 'zoho.com', 'aol.com',
+    ];
+
+    function correoEsDeProveedorReal(correo) {
+      const dominio = correo.split('@')[1]?.toLowerCase().trim();
+      return !!dominio && PROVEEDORES_PERMITIDOS.includes(dominio);
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         mostrarPerfil({ nombre: user.displayName || 'Usuario', correo: user.email });
         actualizarNavLabel(user.displayName);
+
+        // Banner de "verifica tu correo": solo aplica a cuentas de correo/
+        // contraseña. Las cuentas de Google ya vienen verificadas por Google.
+        const esCuentaGoogle = user.providerData.some(p => p.providerId === 'google.com');
+        const banner = document.getElementById('banner-verificar');
+        if (banner) banner.style.display = (!esCuentaGoogle && !user.emailVerified) ? 'flex' : 'none';
       } else {
         document.getElementById('perfil-wrap').style.display = 'none';
         document.getElementById('auth-card').style.display   = 'block';
@@ -510,14 +563,10 @@
       document.getElementById('perfil-nombre').textContent = sesion.nombre;
       document.getElementById('perfil-correo').textContent = sesion.correo;
       document.getElementById('perfil-avatar').textContent = sesion.nombre.charAt(0).toUpperCase();
-      // Cargar stats del localStorage
-      document.getElementById('stat-quiz').textContent  = localStorage.getItem('quiz_best')    || 0;
-      document.getElementById('stat-juego').textContent = localStorage.getItem('games_played') || 0;
-      // Calcular días en la plataforma
-      const registro = localStorage.getItem('signova_fecha_registro');
-      if (!registro) localStorage.setItem('signova_fecha_registro', Date.now());
-      const dias = Math.max(1, Math.floor((Date.now() - parseInt(localStorage.getItem('signova_fecha_registro') || Date.now())) / 86400000));
-      document.getElementById('stat-dias').textContent = dias;
+      // Las estadísticas (racha, quiz, partidas, días, actividad reciente)
+      // las pinta gamification.js de forma centralizada vía SIGNOVA.renderTodo(),
+      // tanto al cargar la página como cuando cloud-sync.js confirma la sesión.
+      if (window.SIGNOVA) SIGNOVA.renderTodo();
     }
 
     function actualizarNavLabel(nombreCompleto) {
@@ -561,17 +610,45 @@
       const confirmar = document.getElementById('reg-confirmar').value;
       if (!nombre || !correo || !pass || !confirmar) { showError('registro-error', 'Completa todos los campos.'); return; }
       if (!/\S+@\S+\.\S+/.test(correo))              { showError('registro-error', 'El correo no es válido.'); return; }
+      if (!correoEsDeProveedorReal(correo)) {
+        showError('registro-error', 'Usa un correo real de Gmail, Outlook, Yahoo, iCloud u otro proveedor conocido.');
+        return;
+      }
       if (pass.length < 6)                            { showError('registro-error', 'Mínimo 6 caracteres en la contraseña.'); return; }
       if (pass !== confirmar)                         { showError('registro-error', 'Las contraseñas no coinciden.'); return; }
       try {
         const cred = await createUserWithEmailAndPassword(auth, correo, pass);
         await updateProfile(cred.user, { displayName: nombre });
+        try { await sendEmailVerification(cred.user); } catch (e) { /* no bloquea el registro si falla el envío */ }
         // onAuthStateChanged se encarga de mostrar el perfil, pero displayName
         // puede tardar un instante en reflejarse ahí, así que lo mostramos ya:
         mostrarPerfil({ nombre, correo });
         actualizarNavLabel(nombre);
       } catch (e) {
         showError('registro-error', mensajeError(e.code));
+      }
+    }
+
+    async function continuarConGoogle() {
+      document.getElementById('google-error').classList.remove('show');
+      try {
+        await signInWithPopup(auth, new GoogleAuthProvider());
+        // onAuthStateChanged se encarga del resto (mostrar perfil, sincronizar, etc.)
+      } catch (e) {
+        if (e.code === 'auth/popup-closed-by-user') return; // el usuario cerró la ventana, no es un error real
+        showError('google-error', 'No se pudo continuar con Google. Intenta de nuevo.');
+      }
+    }
+
+    async function reenviarVerificacion() {
+      const btn = document.getElementById('btn-reenviar-verificacion');
+      try {
+        await sendEmailVerification(auth.currentUser);
+        btn.textContent = 'Enviado ✓';
+        setTimeout(() => { btn.textContent = 'Reenviar correo'; }, 4000);
+      } catch (e) {
+        btn.textContent = 'Espera un momento...';
+        setTimeout(() => { btn.textContent = 'Reenviar correo'; }, 4000);
       }
     }
 
@@ -596,9 +673,11 @@
     // Los atributos onclick del HTML necesitan estas funciones en window,
     // ya que este script es un módulo (sus funciones no son globales por defecto).
     Object.assign(window, {
-      alternarOscuro, switchTab, iniciarSesion, registrar, recuperar, cerrarSesion
+      alternarOscuro, switchTab, iniciarSesion, registrar, recuperar, cerrarSesion,
+      continuarConGoogle, reenviarVerificacion
     });
   </script>
+<script type="module" src="../assets/js/cloud-sync.js"></script>
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>
 </body>

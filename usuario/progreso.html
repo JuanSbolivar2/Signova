@@ -415,12 +415,16 @@
         'deletreo_best', 'deletreo_jugadas',
         'signova_historial', 'signova_categorias_visitadas', 'signova_uso_buscador',
         'signova_racha_count', 'signova_racha_fecha', 'signova_logros_desbloqueados',
+        'signova_dias_conectado',
       ].forEach(k => localStorage.removeItem(k));
+      if (window.SIGNOVA) SIGNOVA.sincronizarNube();
       loadProgress();
     }
 
     loadProgress();
   </script>
+
+<script type="module" src="../assets/js/cloud-sync.js"></script>
 
 <script src="../assets/js/gamification.js"></script>
 <script src="../assets/js/chatbot.js"></script>

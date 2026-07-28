@@ -6,9 +6,12 @@ import {
   signOut,
   updateProfile,
   onAuthStateChanged,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBki5ziLxT4HjggWizmvpbCYwQRSi60OME",
@@ -33,7 +36,13 @@ export {
   signOut,
   updateProfile,
   onAuthStateChanged,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup
 };
+
+// Funciones de Firestore reexportadas (usadas por cloud-sync.js)
+export { doc, getDoc, setDoc };
 
 console.log("✅ Firebase conectado correctamente");
