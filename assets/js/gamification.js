@@ -170,6 +170,19 @@
     return racha;
   }
 
+  /* ---- Limpieza de progreso local (logout / cambio de cuenta) ---------- */
+  const LLAVES_PROGRESO = [
+    'quiz_best', 'quiz_score', 'quiz_played', 'games_played',
+    'contrarreloj_best', 'contrarreloj_combo_max',
+    'deletreo_best', 'deletreo_jugadas',
+    'signova_historial', 'signova_categorias_visitadas', 'signova_uso_buscador',
+    'signova_racha_count', 'signova_racha_fecha', 'signova_logros_desbloqueados',
+    'signova_dias_conectado',
+  ];
+  function limpiarProgresoLocal() {
+    LLAVES_PROGRESO.forEach(k => localStorage.removeItem(k));
+  }
+
   /* ---- Evaluación de logros + detección de "nuevos" -------------------- */
   function evaluarLogros() {
     const stats = obtenerStats();
@@ -336,5 +349,6 @@
     alternarModoOscuro,
     renderTodo,
     sincronizarNube,
+    limpiarProgresoLocal,
   };
 })();

@@ -139,6 +139,13 @@ window.SIGNOVA_CLOUD = {
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+    // Si el progreso guardado en este navegador pertenece a OTRA cuenta
+    // (alguien cerró sesión sin limpiar, o cambió de usuario), lo borramos
+    // antes de fusionar para que la cuenta nueva no "herede" datos ajenos.
+    const uidLocalPrevio = localStorage.getItem('signova_uid_local');
+    if (uidLocalPrevio && uidLocalPrevio !== user.uid && window.SIGNOVA) {
+      window.SIGNOVA.limpiarProgresoLocal();
+    }
     try {
       await cargarYFusionar(user.uid, user.displayName || 'Usuario', user.email);
       uidActual = user.uid;
@@ -152,10 +159,18 @@ onAuthStateChanged(auth, async (user) => {
       window.SIGNOVA_CLOUD.listo = false;
       window.SIGNOVA_CLOUD.usuario = null;
     }
+    localStorage.setItem('signova_uid_local', user.uid);
     localStorage.setItem('signova_sesion', JSON.stringify({
       nombre: user.displayName || 'Usuario', correo: user.email
     }));
   } else {
+    // Al cerrar sesión, el progreso que queda en este navegador "pertenecía"
+    // a la cuenta que se fue: lo borramos para que no se filtre a la
+    // siguiente persona que use este mismo navegador/dispositivo.
+    if (localStorage.getItem('signova_uid_local') && window.SIGNOVA) {
+      window.SIGNOVA.limpiarProgresoLocal();
+    }
+    localStorage.removeItem('signova_uid_local');
     uidActual = null;
     window.SIGNOVA_CLOUD.listo = false;
     window.SIGNOVA_CLOUD.usuario = null;
