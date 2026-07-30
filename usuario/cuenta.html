@@ -354,14 +354,7 @@
       <button class="btn-google" onclick="cerrarSesion()" style="margin-top:0;">Cerrar sesión</button>
     </div>
 
-<<<<<<< HEAD
     <div class="perfil-wrap" id="perfil-wrap">
-=======
-      <div class="banner-verificar" id="banner-verificar" style="display:none">
-        <span> Todavía no has verificado tu correo. Revisa tu bandeja de entrada.</span>
-        <button onclick="reenviarVerificacion()" id="btn-reenviar-verificacion">Reenviar correo</button>
-      </div>
->>>>>>> c524311439ae4b51afddc77067b2c7d7df06f17b
 
       <!-- Header con avatar y nombre -->
       <div class="perfil-header">
@@ -409,7 +402,7 @@
       <div style="margin-bottom:16px;">
 
         <div class="perfil-section" style="margin-bottom:0">
-          <div class="perfil-section-title">Ajustes rápidos</div>
+          <div class="perfil-section-title">⚙️ Ajustes rápidos</div>
           <div class="ajustes-list">
             <div class="ajuste-row">
               <span class="ajuste-label">🌙 Modo oscuro</span>
@@ -562,12 +555,6 @@
         mostrarPantalla('perfil-wrap');
         mostrarPerfil({ nombre: user.displayName || 'Usuario', correo: user.email });
         actualizarNavLabel(user.displayName);
-        // Banner de "verifica tu correo": solo aplica a cuentas de correo/
-        // contraseña. Las cuentas de Google ya vienen verificadas por Google.
-        const esCuentaGoogle = user.providerData.some(p => p.providerId === 'google.com');
-        const banner = document.getElementById('banner-verificar');
-        if (banner) banner.style.display = (!esCuentaGoogle && !user.emailVerified) ? 'flex' : 'none';
-      } else {
       } else {
         mostrarPantalla('auth-card');
         const label = document.getElementById('nav-cuenta-label');
