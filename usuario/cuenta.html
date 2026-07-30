@@ -341,20 +341,12 @@
 
   <section class="cuenta-page">
 
-    <!-- ── PANEL SESIÓN ACTIVA ──────────────────────────────── -->
-    <!-- ── PENDIENTE DE VERIFICACIÓN (cuentas correo/contraseña sin confirmar) ── -->
-    <div class="auth-card" id="pendiente-verificacion" style="display:none; text-align:center;">
-      <div style="font-size:2.5rem; margin-bottom:12px;">✉️</div>
-      <h2 style="margin-bottom:10px;">Verifica tu correo</h2>
-      <p style="color:var(--gris-texto); margin-bottom:20px; line-height:1.5;">
-        Te enviamos un enlace de confirmación a <strong id="correo-pendiente"></strong>.
-        Ábrelo para activar tu cuenta — mientras tanto no puedes ver tu perfil ni tu progreso.
-      </p>
-      <button class="btn-google" onclick="reenviarVerificacion()" id="btn-reenviar-verificacion" style="border-color:var(--morado); color:var(--morado);">Reenviar correo</button>
-      <button class="btn-google" onclick="cerrarSesion()" style="margin-top:0;">Cerrar sesión</button>
-    </div>
+    <!-- ── PANEL SESIÓN ACTIVA ──────────────────────────────── -->iv class="perfil-wrap" id="perfil-wrap">
 
-    <div class="perfil-wrap" id="perfil-wrap">
+      <div class="banner-verificar" id="banner-verificar" style="display:none">
+        <span> Todavía no has verificado tu correo. Revisa tu bandeja de entrada (y spam).</span>
+        <button onclick="reenviarVerificacion()" id="btn-reenviar-verificacion">Reenviar correo</button>
+      </div>
 
       <!-- Header con avatar y nombre -->
       <div class="perfil-header">
@@ -537,26 +529,19 @@
       return !!dominio && PROVEEDORES_PERMITIDOS.includes(dominio);
     }
 
-    function mostrarPantalla(id) {
-      ['auth-card', 'pendiente-verificacion', 'perfil-wrap'].forEach(otro => {
-        document.getElementById(otro).style.display = (otro === id) ? 'block' : 'none';
-      });
-    }
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const esCuentaGoogle = user.providerData.some(p => p.providerId === 'google.com');
-        if (!esCuentaGoogle && !user.emailVerified) {
-          // Correo/contraseña sin confirmar: NO se muestra el perfil ni el progreso.
-          document.getElementById('correo-pendiente').textContent = user.email;
-          mostrarPantalla('pendiente-verificacion');
-          return;
-        }
-        mostrarPantalla('perfil-wrap');
         mostrarPerfil({ nombre: user.displayName || 'Usuario', correo: user.email });
         actualizarNavLabel(user.displayName);
+
+        // Banner de "verifica tu correo": solo aplica a cuentas de correo/
+        // contraseña. Las cuentas de Google ya vienen verificadas por Google.
+        const esCuentaGoogle = user.providerData.some(p => p.providerId === 'google.com');
+        const banner = document.getElementById('banner-verificar');
+        if (banner) banner.style.display = (!esCuentaGoogle && !user.emailVerified) ? 'flex' : 'none';
       } else {
-        mostrarPantalla('auth-card');
+        document.getElementById('perfil-wrap').style.display = 'none';
+        document.getElementById('auth-card').style.display   = 'block';
         const label = document.getElementById('nav-cuenta-label');
         if (label) label.textContent = 'Cuenta';
       }
@@ -572,6 +557,8 @@
     }
 
     function mostrarPerfil(sesion) {
+      document.getElementById('auth-card').style.display   = 'none';
+      document.getElementById('perfil-wrap').style.display = 'block';
       document.getElementById('perfil-nombre').textContent = sesion.nombre;
       document.getElementById('perfil-correo').textContent = sesion.correo;
       document.getElementById('perfil-avatar').textContent = sesion.nombre.charAt(0).toUpperCase();
@@ -632,10 +619,10 @@
         const cred = await createUserWithEmailAndPassword(auth, correo, pass);
         await updateProfile(cred.user, { displayName: nombre });
         try { await sendEmailVerification(cred.user); } catch (e) { /* no bloquea el registro si falla el envío */ }
-        // onAuthStateChanged confirmará el estado real (sin verificar) y
-        // mostrará la pantalla de "pendiente de verificación" correspondiente.
-        document.getElementById('correo-pendiente').textContent = correo;
-        mostrarPantalla('pendiente-verificacion');
+        // onAuthStateChanged se encarga de mostrar el perfil, pero displayName
+        // puede tardar un instante en reflejarse ahí, así que lo mostramos ya:
+        mostrarPerfil({ nombre, correo });
+        actualizarNavLabel(nombre);
       } catch (e) {
         showError('registro-error', mensajeError(e.code));
       }
