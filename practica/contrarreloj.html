@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contrarreloj — SIGNOVA</title>
+<title>Contrarreloj — HANDNOVA</title>
 <link rel="stylesheet" href="../assets/css/styles.css">
 <style>
   .cr-page {
@@ -107,7 +107,7 @@
 <div class="blob-decorativo blob2"></div>
 
 <nav class="navbar">
-  <a href="../index.html" class="logo"><span class="logo-s">S</span><span class="logo-ig">IG</span><span class="logo-no">NO</span><span class="logo-va">VA</span></a>
+  <a href="../index.html" class="logo"><span class="logo-s">H</span><span class="logo-ig">AND</span><span class="logo-no">NO</span><span class="logo-va">VA</span></a>
   <ul class="nav-links">
     <li><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></a></li>
     <li><a href="../lecciones/categorias.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Categorías</span></a></li>
@@ -178,7 +178,7 @@
 </section>
 
 <footer>
-  <strong>SIGNOVA</strong> — Plataforma de aprendizaje de Lengua de Señas Colombiana &nbsp;·&nbsp; Proyecto Formativo SENA
+  <strong>HANDNOVA</strong> — Plataforma de aprendizaje de Lengua de Señas Colombiana &nbsp;·&nbsp; Proyecto Formativo SENA
 </footer>
 
 <script>
@@ -334,13 +334,13 @@
     const comboPrevio = parseInt(localStorage.getItem('contrarreloj_combo_max') || '0');
     if (mejorCombo > comboPrevio) localStorage.setItem('contrarreloj_combo_max', mejorCombo);
 
-    if (window.SIGNOVA) {
-      SIGNOVA.registrarPractica('⏱️', `Contrarreloj: ${puntaje} puntos`, puntaje);
+    if (window.HANDNOVA) {
+      HANDNOVA.registrarPractica('⏱️', `Contrarreloj: ${puntaje} puntos`, puntaje);
     }
   }
 
   (function() {
-    const sesion = JSON.parse(localStorage.getItem('signova_sesion') || 'null');
+    const sesion = JSON.parse(localStorage.getItem('HANDNOVA_sesion') || 'null');
     const label = document.getElementById('nav-cuenta-label');
     if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
   })();

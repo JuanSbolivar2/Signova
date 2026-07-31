@@ -1,5 +1,5 @@
 /* ==========================================================================
-   chatbot.js — SIGNOVA
+   chatbot.js — HANDNOVA
    Asistente virtual basado en reglas (sin IA / sin llamadas a servidor).
    Detecta palabras clave en la pregunta del usuario y responde con
    respuestas predefinidas sobre LSC, la plataforma, categorías, juegos,
@@ -22,9 +22,9 @@
 
     /* ---- 1. Saludos y sobre el bot ---- */
     { p: ['hola', 'buenas', 'buenos dias', 'buenas tardes', 'buenas noches', 'hey', 'que tal'],
-      r: '¡Hola! 👋 Soy el asistente de SIGNOVA. Puedo ayudarte con dudas sobre la Lengua de Señas Colombiana, las categorías, los juegos, tu cuenta y tu progreso. ¿Qué necesitas?' },
+      r: '¡Hola! 👋 Soy el asistente de HANDNOVA. Puedo ayudarte con dudas sobre la Lengua de Señas Colombiana, las categorías, los juegos, tu cuenta y tu progreso. ¿Qué necesitas?' },
     { p: ['quien eres', 'que eres', 'eres una ia', 'eres un robot', 'eres humano', 'con quien hablo'],
-      r: 'Soy un asistente de reglas de SIGNOVA: reconozco palabras clave en tu mensaje y te respondo con información predefinida sobre la plataforma. No soy una IA generativa, así que funciono mejor con preguntas cortas y directas 🙂' },
+      r: 'Soy un asistente de reglas de HANDNOVA: reconozco palabras clave en tu mensaje y te respondo con información predefinida sobre la plataforma. No soy una IA generativa, así que funciono mejor con preguntas cortas y directas 🙂' },
     { p: ['que puedes hacer', 'para que sirves', 'en que me ayudas', 'ayuda', 'necesito ayuda', 'que sabes hacer'],
       r: 'Puedo orientarte sobre: qué es la LSC, cómo usar las categorías, el buscador, el abecedario, los juegos (Quiz, Busca Parejas, Contrarreloj, Deletreo), tu cuenta, tu progreso, tus logros y el modo oscuro. Pregúntame por cualquiera de esos temas.' },
     { p: ['gracias', 'muchas gracias', 'te lo agradezco', 'genial gracias'],
@@ -52,35 +52,35 @@
     { p: ['que es la comunidad sorda', 'quienes son la comunidad sorda'],
       r: 'La comunidad sorda es el conjunto de personas sordas que comparten la LSC como lengua e identidad cultural propia. No se ven a sí mismas como "personas con discapacidad que no oyen", sino como una comunidad lingüística y cultural.' },
     { p: ['necesito saber espanol para aprender lsc', 'necesito experiencia previa'],
-      r: 'No necesitas experiencia previa. SIGNOVA está pensado para estudiantes, familias y cualquier persona que quiera empezar desde cero a comunicarse en LSC.' },
+      r: 'No necesitas experiencia previa. HANDNOVA está pensado para estudiantes, familias y cualquier persona que quiera empezar desde cero a comunicarse en LSC.' },
     { p: ['que es una glosa', 'que es glosar'],
       r: 'Una glosa es la forma de escribir una seña usando palabras en mayúscula del español, solo como referencia (por ejemplo: YO CASA IR). No es una traducción literal, es solo una anotación para representar la seña por escrito.' },
     { p: ['la lsc tiene expresiones faciales', 'las expresiones faciales importan en lsc'],
       r: 'Sí, las expresiones faciales son parte fundamental de la gramática de la LSC: pueden cambiar el significado de una seña, indicar preguntas, negaciones o intensidad, igual que la entonación en el español hablado.' },
     { p: ['puedo aprender lsc solo con videos', 'es suficiente con la plataforma para aprender lsc'],
-      r: 'SIGNOVA es un excelente punto de partida para familiarizarte con el vocabulario y la lógica de la LSC, pero para dominarla te recomendamos también practicar con la comunidad sorda o tomar cursos certificados con intérpretes.' },
+      r: 'HANDNOVA es un excelente punto de partida para familiarizarte con el vocabulario y la lógica de la LSC, pero para dominarla te recomendamos también practicar con la comunidad sorda o tomar cursos certificados con intérpretes.' },
 
-    /* ---- 3. Sobre la plataforma SIGNOVA ---- */
-    { p: ['que es signova', 'que es esta pagina', 'que es esta plataforma', 'de que trata signova'],
-      r: 'SIGNOVA es una plataforma web para aprender Lengua de Señas Colombiana (LSC) con videos reales, organizados por categorías, además de juegos, un buscador de señas y seguimiento de tu progreso.' },
+    /* ---- 3. Sobre la plataforma HANDNOVA ---- */
+    { p: ['que es HANDNOVA', 'que es esta pagina', 'que es esta plataforma', 'de que trata HANDNOVA'],
+      r: 'HANDNOVA es una plataforma web para aprender Lengua de Señas Colombiana (LSC) con videos reales, organizados por categorías, además de juegos, un buscador de señas y seguimiento de tu progreso.' },
     { p: ['es gratis', 'cuesta dinero', 'tiene algun costo', 'debo pagar'],
-      r: 'SIGNOVA es un proyecto formativo, de acceso libre. No tiene ningún costo.' },
-    { p: ['quien hizo signova', 'quien creo esta pagina', 'quien desarrollo esto'],
-      r: 'SIGNOVA es un proyecto formativo desarrollado en el marco del SENA, con el objetivo de acercar la Lengua de Señas Colombiana a más personas.' },
+      r: 'HANDNOVA es un proyecto formativo, de acceso libre. No tiene ningún costo.' },
+    { p: ['quien hizo HANDNOVA', 'quien creo esta pagina', 'quien desarrollo esto'],
+      r: 'HANDNOVA es un proyecto formativo desarrollado en el marco del SENA, con el objetivo de acercar la Lengua de Señas Colombiana a más personas.' },
     { p: ['necesito internet', 'funciona sin internet', 'funciona offline'],
       r: 'Necesitas conexión a internet, ya que los videos de las señas y algunos recursos se cargan desde la web.' },
     { p: ['funciona en el celular', 'funciona en movil', 'tiene aplicacion', 'hay app para descargar'],
-      r: 'SIGNOVA funciona directamente desde el navegador y su diseño se adapta a celular, tablet y computador. No necesitas descargar ninguna aplicación.' },
+      r: 'HANDNOVA funciona directamente desde el navegador y su diseño se adapta a celular, tablet y computador. No necesitas descargar ninguna aplicación.' },
     { p: ['tengo que registrarme para usar la pagina', 'necesito crear cuenta para ver las lecciones'],
       r: 'Puedes explorar las categorías, el abecedario y el buscador sin necesidad de registrarte. Crear una cuenta es solo necesario si quieres guardar tu progreso, tu racha y tus logros.' },
     { p: ['necesito camara', 'necesito una webcam', 'para que sirve la camara'],
       r: 'La cámara solo es necesaria si usas las herramientas de práctica con reconocimiento de manos (parte del módulo de machine learning del proyecto). Para ver videos de señas, jugar o consultar el buscador no la necesitas.' },
-    { p: ['que secciones tiene signova', 'que puedo hacer en signova', 'que opciones tiene el menu'],
+    { p: ['que secciones tiene HANDNOVA', 'que puedo hacer en HANDNOVA', 'que opciones tiene el menu'],
       r: 'El menú principal tiene: Categorías (lecciones por tema), Abecedario, Buscar (encuentra una seña por palabra), Cuenta, y en "Más": Juego, Quiz y Progreso.' },
-    { p: ['signova sirve para intérpretes', 'sirve para nivel avanzado'],
-      r: 'SIGNOVA está pensado principalmente para principiantes: vocabulario básico por categorías, el abecedario y práctica con juegos. Es un buen primer paso antes de una formación más avanzada o certificada.' },
-    { p: ['en que colores esta el logo', 'de que color es signova'],
-      r: 'La identidad visual de SIGNOVA usa un degradado de magenta, morado y cian, tanto en el logo como en los acentos de la interfaz.' },
+    { p: ['HANDNOVA sirve para intérpretes', 'sirve para nivel avanzado'],
+      r: 'HANDNOVA está pensado principalmente para principiantes: vocabulario básico por categorías, el abecedario y práctica con juegos. Es un buen primer paso antes de una formación más avanzada o certificada.' },
+    { p: ['en que colores esta el logo', 'de que color es HANDNOVA'],
+      r: 'La identidad visual de HANDNOVA usa un degradado de magenta, morado y cian, tanto en el logo como en los acentos de la interfaz.' },
 
     /* ---- 4. Categorías / lecciones ---- */
     { p: ['que son las categorias', 'como funcionan las categorias', 'para que sirven las categorias', 'que hay en categorias', 'categorias', 'que categorias hay'],
@@ -130,7 +130,7 @@
     { p: ['que es el abecedario', 'para que sirve la seccion abecedario', 'abecedario'],
       r: 'La sección Abecedario muestra en video cómo se hace cada letra con la mano (alfabeto dactilológico), de la A a la Z, incluyendo la Ñ.' },
     { p: ['cuantas letras tiene el abecedario', 'cuantas letras hay en la seccion abecedario'],
-      r: 'El Abecedario de SIGNOVA tiene las 27 letras del alfabeto español, incluida la Ñ.' },
+      r: 'El Abecedario de HANDNOVA tiene las 27 letras del alfabeto español, incluida la Ñ.' },
     { p: ['donde encuentro el abecedario', 'como entro al abecedario'],
       r: 'Puedes entrar al Abecedario desde el menú principal, entre "Categorías" y "Buscar".' },
     { p: ['para que sirve saber el abecedario en senas', 'para que sirve el alfabeto dactilologico'],
@@ -146,7 +146,7 @@
     { p: ['donde esta el buscador', 'donde encuentro buscar'],
       r: 'La sección "Buscar" está en el menú principal, con el ícono de una lupa.' },
     { p: ['que pasa si busco una palabra que no existe', 'no aparece la palabra que busque'],
-      r: 'Si buscas una palabra que aún no está en el catálogo de señas de SIGNOVA, el buscador te avisará que no encontró resultados. Puedes intentar con sinónimos o revisar las categorías disponibles.' },
+      r: 'Si buscas una palabra que aún no está en el catálogo de señas de HANDNOVA, el buscador te avisará que no encontró resultados. Puedes intentar con sinónimos o revisar las categorías disponibles.' },
     { p: ['el buscador necesita internet', 'el buscador funciona sin conexion'],
       r: 'Sí, el buscador necesita conexión a internet para cargar el catálogo de señas y los videos.' },
     { p: ['antes se llamaba traductor', 'donde quedo el traductor'],
@@ -155,8 +155,8 @@
       r: 'No, el buscador funciona por palabras individuales, no traduce frases u oraciones completas a LSC.' },
 
     /* ---- 7. Juegos: overview ---- */
-    { p: ['que juegos hay', 'que juegos tiene signova', 'donde estan los juegos', 'juegos'],
-      r: 'SIGNOVA tiene 3 juegos: Quiz (preguntas de opción múltiple), Busca Parejas (relacionar palabra y video) y Contrarreloj (adivina la seña antes de que se acabe el tiempo). Los encuentras en el menú "Más".' },
+    { p: ['que juegos hay', 'que juegos tiene HANDNOVA', 'donde estan los juegos', 'juegos'],
+      r: 'HANDNOVA tiene 3 juegos: Quiz (preguntas de opción múltiple), Busca Parejas (relacionar palabra y video) y Contrarreloj (adivina la seña antes de que se acabe el tiempo). Los encuentras en el menú "Más".' },
     { p: ['como entro a los juegos', 'donde esta la seccion de juegos'],
       r: 'Ve al menú "Más" y toca "Juego"; ahí verás las 3 opciones disponibles: Quiz, Busca Parejas y Contrarreloj.' },
     { p: ['los juegos sirven para practicar', 'para que sirven los juegos'],
@@ -201,7 +201,7 @@
       r: 'En la pantalla de inicio de sesión hay una opción de "Recuperar contraseña" donde puedes restablecerla con tu correo registrado.' },
     { p: ['como cierro sesion', 'como salgo de mi cuenta', 'como hago logout'],
       r: 'Desde la sección "Cuenta" encuentras la opción para cerrar sesión.' },
-    { p: ['es obligatorio crear una cuenta', 'puedo usar signova sin cuenta'],
+    { p: ['es obligatorio crear una cuenta', 'puedo usar HANDNOVA sin cuenta'],
       r: 'No es obligatorio. Puedes ver categorías, el abecedario y usar el buscador sin cuenta. Solo la necesitas para guardar tu progreso, racha y logros.' },
     { p: ['puedo cambiar mis datos de cuenta', 'como edito mi perfil'],
       r: 'En la sección "Cuenta" puedes gestionar la información de tu perfil una vez hayas iniciado sesión.' },
@@ -212,25 +212,25 @@
     { p: ['como veo mi progreso', 'donde esta mi progreso', 'progreso'],
       r: 'Ve al menú "Más" y toca "Progreso". Ahí ves tu avance por categoría, tus logros y tu historial reciente.' },
     { p: ['que es la racha', 'como funciona la racha', 'como sumo dias de racha', 'racha'],
-      r: 'La racha cuenta los días seguidos que practicas en SIGNOVA. Se muestra en la barra de navegación y aumenta cada día que entras y practicas algo.' },
+      r: 'La racha cuenta los días seguidos que practicas en HANDNOVA. Se muestra en la barra de navegación y aumenta cada día que entras y practicas algo.' },
     { p: ['que es el xp', 'que es el nivel', 'como subo de nivel'],
-      r: 'El XP son puntos de experiencia que ganas al usar la plataforma (jugar, completar retos, etc.). Al acumular suficiente XP subes de nivel dentro de SIGNOVA.' },
+      r: 'El XP son puntos de experiencia que ganas al usar la plataforma (jugar, completar retos, etc.). Al acumular suficiente XP subes de nivel dentro de HANDNOVA.' },
     { p: ['que son los logros', 'donde veo mis logros', 'que logros hay', 'logros'],
       r: 'Los logros son insignias que desbloqueas al cumplir ciertos retos: por ejemplo crear tu cuenta, jugar tu primer quiz, usar el buscador, jugar 5 partidas, visitar 5 categorías, o mantener una racha de 7 días. Los ves en la sección Progreso.' },
     { p: ['cuantos logros hay', 'cuantos logros puedo desbloquear'],
-      r: 'Actualmente hay 12 logros disponibles en SIGNOVA, desde "Perfil creado" hasta "Maestro de señas" (20 partidas jugadas en total).' },
+      r: 'Actualmente hay 12 logros disponibles en HANDNOVA, desde "Perfil creado" hasta "Maestro de señas" (20 partidas jugadas en total).' },
     { p: ['que es el logro explorador', 'como desbloqueo explorador'],
       r: 'El logro "Explorador" se desbloquea al visitar 5 categorías distintas de lecciones.' },
     { p: ['que es el logro velocista', 'como desbloqueo velocista'],
       r: 'El logro "Velocista" se desbloquea al jugar una ronda del juego Contrarreloj.' },
     { p: ['que es el logro constante', 'como desbloqueo constante'],
-      r: 'El logro "Constante" se desbloquea al mantener una racha de 3 días seguidos practicando en SIGNOVA.' },
+      r: 'El logro "Constante" se desbloquea al mantener una racha de 3 días seguidos practicando en HANDNOVA.' },
     { p: ['que es el logro maestro de senas', 'como desbloqueo maestro de senas'],
       r: 'El logro "Maestro de señas" se desbloquea al jugar 20 partidas en total, sumando todos los juegos de la plataforma.' },
     { p: ['mi progreso se guarda si cambio de dispositivo', 'mi progreso se sincroniza entre dispositivos'],
       r: 'Tu racha, XP y logros se guardan en el navegador de tu dispositivo (localStorage), así que si cambias de celular o computador o borras los datos del navegador, ese progreso local no se transfiere automáticamente.' },
     { p: ['como veo mi historial', 'donde esta mi historial reciente'],
-      r: 'En la sección "Progreso" encuentras un bloque de "Historial reciente" con tus últimas actividades en SIGNOVA.' },
+      r: 'En la sección "Progreso" encuentras un bloque de "Historial reciente" con tus últimas actividades en HANDNOVA.' },
 
     /* ---- 10. Modo oscuro / accesibilidad ---- */
     { p: ['como activo el modo oscuro', 'donde esta el modo oscuro', 'como pongo la pagina en oscuro', 'modo oscuro'],
@@ -240,13 +240,13 @@
 
     /* ---- 11. Navegación general / soporte ---- */
     { p: ['como vuelvo al inicio', 'donde esta el inicio'],
-      r: 'Toca el logo "SIGNOVA" en la esquina superior izquierda, o la opción "Inicio" del menú, para volver a la página principal.' },
+      r: 'Toca el logo "HANDNOVA" en la esquina superior izquierda, o la opción "Inicio" del menú, para volver a la página principal.' },
     { p: ['tengo un error', 'la pagina no carga', 'un video no funciona', 'encontre un bug'],
       r: 'Lamento el inconveniente. Intenta recargar la página; si el problema sigue, revisa tu conexión a internet. Este chat no puede corregir errores técnicos directamente, pero puedes reportarlo a quien administre el proyecto.' },
-    { p: ['en que lenguaje esta hecho signova', 'con que tecnologia esta hecho'],
+    { p: ['en que lenguaje esta hecho HANDNOVA', 'con que tecnologia esta hecho'],
       r: 'El frontend está hecho en HTML, CSS y JavaScript; el backend usa PHP con base de datos MariaDB, y hay un módulo aparte en Python para el reconocimiento de manos.' },
-    { p: ['puedo contribuir al proyecto', 'como colaboro con signova'],
-      r: 'SIGNOVA es un proyecto formativo; si quieres colaborar o sugerir mejoras, lo mejor es contactar directamente a quienes lo desarrollan.' },
+    { p: ['puedo contribuir al proyecto', 'como colaboro con HANDNOVA'],
+      r: 'HANDNOVA es un proyecto formativo; si quieres colaborar o sugerir mejoras, lo mejor es contactar directamente a quienes lo desarrollan.' },
   ];
 
   /* Sugerencias rápidas que se muestran al abrir el chat por primera vez */
@@ -297,7 +297,7 @@
   /* ------------------------------------------------------------------ *
    * 3. PERSISTENCIA DEL HISTORIAL (localStorage, compartido entre páginas)
    * ------------------------------------------------------------------ */
-  const CLAVE_HISTORIAL = 'signova_chat_historial';
+  const CLAVE_HISTORIAL = 'HANDNOVA_chat_historial';
   const MAX_MENSAJES = 60;
 
   function cargarHistorial() {
@@ -317,9 +317,9 @@
    * 4. ESTILOS (inyectados una sola vez)
    * ------------------------------------------------------------------ */
   function inyectarEstilos() {
-    if (document.getElementById('signova-chatbot-estilos')) return;
+    if (document.getElementById('HANDNOVA-chatbot-estilos')) return;
     const estilo = document.createElement('style');
-    estilo.id = 'signova-chatbot-estilos';
+    estilo.id = 'HANDNOVA-chatbot-estilos';
     estilo.textContent = `
       .sv-cb-burbuja {
         position: fixed; bottom: 22px; right: 22px; width: 58px; height: 58px;
@@ -402,7 +402,7 @@
         .sv-cb-burbuja { right: 16px; bottom: 16px; }
       }
 
-      /* ---- Modo oscuro (misma convención que el resto de SIGNOVA) ---- */
+      /* ---- Modo oscuro (misma convención que el resto de HANDNOVA) ---- */
       body.modo-oscuro .sv-cb-panel { background: #1a1d27; }
       body.modo-oscuro .sv-cb-mensajes { background: #12141c; }
       body.modo-oscuro .sv-cb-msg-bot { background: #232733; color: #e5e7eb; }
@@ -424,7 +424,7 @@
     const burbuja = document.createElement('button');
     burbuja.className = 'sv-cb-burbuja';
     burbuja.type = 'button';
-    burbuja.title = 'Asistente SIGNOVA';
+    burbuja.title = 'Asistente HANDNOVA';
     burbuja.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>';
 
     // Panel
@@ -434,7 +434,7 @@
       <div class="sv-cb-header">
         <div class="sv-cb-header-avatar">🤖</div>
         <div class="sv-cb-header-texto">
-          <strong>Asistente SIGNOVA</strong>
+          <strong>Asistente HANDNOVA</strong>
         </div>
         <button type="button" class="sv-cb-cerrar" title="Cerrar" id="sv-cb-cerrar">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -484,7 +484,7 @@
     function renderizarTodo() {
       zonaMensajes.innerHTML = '';
       if (historial.length === 0) {
-        const bienvenida = '¡Hola! 👋 Soy el asistente de SIGNOVA. Pregúntame sobre la LSC, las categorías, los juegos, tu cuenta o tu progreso.';
+        const bienvenida = '¡Hola! 👋 Soy el asistente de HANDNOVA. Pregúntame sobre la LSC, las categorías, los juegos, tu cuenta o tu progreso.';
         pintarMensaje('bot', bienvenida);
         historial.push({ rol: 'bot', texto: bienvenida });
         guardarHistorial(historial);

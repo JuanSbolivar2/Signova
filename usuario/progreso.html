@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Progreso — SIGNOVA</title>
+  <title>Mi Progreso — HANDNOVA</title>
   <link rel="stylesheet" href="../assets/css/styles.css">
   <style>
     .progreso-page {
@@ -214,7 +214,7 @@
 <body>
 
   <nav class="navbar">
-    <a href="../index.html" class="logo"><span class="logo-s">S</span><span class="logo-ig">IG</span><span class="logo-no">NO</span><span class="logo-va">VA</span></a>
+    <a href="../index.html" class="logo"><span class="logo-s">H</span><span class="logo-ig">AND</span><span class="logo-no">NO</span><span class="logo-va">VA</span></a>
     <ul class="nav-links">
       <li><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></a></li>
       <li><a href="../lecciones/categorias.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Categorías</span></a></li>
@@ -240,7 +240,7 @@
 
     <div class="progreso-header">
       <h1>Mi progreso</h1>
-      <p>Aquí puedes ver todo lo que has aprendido en SIGNOVA.</p>
+      <p>Aquí puedes ver todo lo que has aprendido en HANDNOVA.</p>
       <span class="racha-badge" id="racha-badge">🔥 0 días de racha</span>
       <div class="progreso-nivel">
         <div class="progreso-nivel-label"><span id="nivel-label">Nivel 1</span><span id="xp-label">0 XP</span></div>
@@ -331,7 +331,7 @@
   </section>
 
   <footer>
-    <strong>SIGNOVA</strong> — Plataforma de aprendizaje de Lengua de Señas Colombiana &nbsp;·&nbsp;
+    <strong>HANDNOVA</strong> — Plataforma de aprendizaje de Lengua de Señas Colombiana &nbsp;·&nbsp;
     Proyecto Formativo SENA
   </footer>
 
@@ -368,10 +368,10 @@
       });
 
       // Racha, nivel y XP — a partir del motor central de gamificación
-      if (window.SIGNOVA) {
-        const stats = SIGNOVA.obtenerStats();
-        const xp = SIGNOVA.calcularXP(stats);
-        const { nivel, porcentaje } = SIGNOVA.obtenerNivel(xp);
+      if (window.HANDNOVA) {
+        const stats = HANDNOVA.obtenerStats();
+        const xp = HANDNOVA.calcularXP(stats);
+        const { nivel, porcentaje } = HANDNOVA.obtenerNivel(xp);
 
         document.getElementById('racha-badge').textContent =
           `🔥 ${stats.racha} ${stats.racha === 1 ? 'día' : 'días'} de racha`;
@@ -380,7 +380,7 @@
         setTimeout(() => { document.getElementById('xp-relleno').style.width = porcentaje + '%'; }, 200);
 
         // Logros — renderizados a partir del catálogo real (styles.css: .logro-tarjeta)
-        const { resultado } = SIGNOVA.evaluarLogros();
+        const { resultado } = HANDNOVA.evaluarLogros();
         const grid = document.getElementById('logros-grid');
         grid.innerHTML = resultado.map(l => `
           <div class="logro-tarjeta${l.desbloqueado ? '' : ' bloqueado'}" title="${l.desc}">
@@ -393,7 +393,7 @@
       }
 
       // Historial
-      const historial = JSON.parse(localStorage.getItem('signova_historial') || '[]');
+      const historial = JSON.parse(localStorage.getItem('HANDNOVA_historial') || '[]');
       const lista = document.getElementById('historial-list');
       if (historial.length > 0) {
         lista.innerHTML = historial.slice(-5).reverse().map(h => `
@@ -404,7 +404,7 @@
           </div>`).join('');
       }
       // Registrar visita
-      if (window.SIGNOVA) SIGNOVA.registrarHistorial('📊', 'Revisaste tu progreso', '');
+      if (window.HANDNOVA) HANDNOVA.registrarHistorial('📊', 'Revisaste tu progreso', '');
     }
 
     function resetProgress() {
@@ -413,11 +413,11 @@
         'quiz_best', 'quiz_score', 'quiz_played', 'games_played',
         'contrarreloj_best', 'contrarreloj_combo_max',
         'deletreo_best', 'deletreo_jugadas',
-        'signova_historial', 'signova_categorias_visitadas', 'signova_uso_buscador',
-        'signova_racha_count', 'signova_racha_fecha', 'signova_logros_desbloqueados',
-        'signova_dias_conectado',
+        'HANDNOVA_historial', 'HANDNOVA_categorias_visitadas', 'HANDNOVA_uso_buscador',
+        'HANDNOVA_racha_count', 'HANDNOVA_racha_fecha', 'HANDNOVA_logros_desbloqueados',
+        'HANDNOVA_dias_conectado',
       ].forEach(k => localStorage.removeItem(k));
-      if (window.SIGNOVA) SIGNOVA.sincronizarNube();
+      if (window.HANDNOVA) HANDNOVA.sincronizarNube();
       loadProgress();
     }
 

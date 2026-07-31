@@ -1,12 +1,12 @@
 rules_version = '2';
 
-// Reglas de seguridad para SIGNOVA.
+// Reglas de seguridad para HANDNOVA.
 // Cada usuario autenticado solo puede leer y escribir SU PROPIO documento
 // en la colección "usuarios" (el id del documento es su uid de Firebase Auth).
 // Nadie puede leer ni modificar el progreso de otra persona.
 //
 // Cómo aplicarlas:
-// 1. Ve a la consola de Firebase → tu proyecto (signova-2a450) → Firestore Database → pestaña "Reglas".
+// 1. Ve a la consola de Firebase → tu proyecto (HANDNOVA-2a450) → Firestore Database → pestaña "Reglas".
 // 2. Pega el contenido de abajo (reemplazando lo que haya).
 // 3. Clic en "Publicar".
 

@@ -1,12 +1,12 @@
 /* ==========================================================================
-   gamification.js — SIGNOVA
+   gamification.js — HANDNOVA
    Motor central de gamificación: racha, días conectado, XP/nivel, logros
    y actividad reciente. Se incluye en TODAS las páginas.
 
    Reglas de negocio (2ª versión):
    - "Racha" solo sube cuando la persona TERMINA un quiz o un juego
      (no por visitar cualquier página). Ver registrarPractica().
-   - "Días en SIGNOVA" cuenta días reales de conexión (no tiempo
+   - "Días en HANDNOVA" cuenta días reales de conexión (no tiempo
      transcurrido desde el registro). Ver registrarDiaConexion().
    - "Actividad reciente" se guarda siempre que: termina un quiz/juego,
      visita una categoría, o usa el buscador con éxito.
@@ -20,7 +20,7 @@
 
   /* ---- Catálogo de logros -------------------------------------------- */
   const LOGROS = [
-    { id: 'perfil',       icon: '👤', nombre: 'Perfil creado',      desc: 'Creaste tu cuenta en SIGNOVA',                check: s => s.tieneSesion },
+    { id: 'perfil',       icon: '👤', nombre: 'Perfil creado',      desc: 'Creaste tu cuenta en HANDNOVA',                check: s => s.tieneSesion },
     { id: 'primer-quiz',  icon: '🧠', nombre: 'Primer quiz',        desc: 'Completaste tu primer quiz',                  check: s => s.quizJugados > 0 },
     { id: 'puntaje-10',   icon: '⭐', nombre: 'Puntaje 10+',        desc: 'Sacaste 10 puntos o más en un quiz',          check: s => s.quizMejor >= 10 },
     { id: 'buscador',     icon: '🔍', nombre: 'Usaste el buscador', desc: 'Buscaste una seña en Buscar',           check: s => s.usoBuscador },
@@ -30,7 +30,7 @@
     { id: 'combo-x3',     icon: '💥', nombre: 'Combo x3',           desc: 'Encadenaste un combo x3 en Contrarreloj',     check: s => s.comboMax >= 3 },
     { id: 'deletreo',     icon: '🔤', nombre: 'Deletreo LSC',       desc: 'Completaste el reto de deletreo',             check: s => s.deletreoJugado },
     { id: 'constante',    icon: '🔥', nombre: 'Constante',          desc: 'Racha de 3 días seguidos practicando',        check: s => s.racha >= 3 },
-    { id: 'racha-7',      icon: '📅', nombre: 'Racha de 7 días',    desc: '7 días seguidos practicando en SIGNOVA',      check: s => s.racha >= 7 },
+    { id: 'racha-7',      icon: '📅', nombre: 'Racha de 7 días',    desc: '7 días seguidos practicando en HANDNOVA',      check: s => s.racha >= 7 },
     { id: 'maestro',      icon: '🏆', nombre: 'Maestro de señas',   desc: '20 partidas jugadas en total',                check: s => s.partidasTotales >= 20 },
   ];
 
@@ -45,15 +45,15 @@
     const quizPlayed  = num('quiz_played');
     const deletreoJug = num('deletreo_jugadas');
     return {
-      tieneSesion:        !!localStorage.getItem('signova_sesion'),
+      tieneSesion:        !!localStorage.getItem('HANDNOVA_sesion'),
       quizJugados:        quizPlayed,
       quizMejor:          num('quiz_best'),
       partidasJugadas:    gamesPlayed + deletreoJug,       // Juego + Contrarreloj + Deletreo
       partidasTotales:    quizPlayed + gamesPlayed + deletreoJug,
-      categoriasVisitadas: arr('signova_categorias_visitadas').length,
-      usoBuscador:        localStorage.getItem('signova_uso_buscador') === '1',
-      racha:              num('signova_racha_count'),
-      diasConectado:      arr('signova_dias_conectado').length || 1,
+      categoriasVisitadas: arr('HANDNOVA_categorias_visitadas').length,
+      usoBuscador:        localStorage.getItem('HANDNOVA_uso_buscador') === '1',
+      racha:              num('HANDNOVA_racha_count'),
+      diasConectado:      arr('HANDNOVA_dias_conectado').length || 1,
       contrarrelojJugado: !!localStorage.getItem('contrarreloj_best'),
       comboMax:           num('contrarreloj_combo_max'),
       deletreoJugado:     !!localStorage.getItem('deletreo_best'),
@@ -86,25 +86,25 @@
   /* ---- Racha: SOLO sube cuando se llama desde registrarPractica() ------ */
   function bumpRacha() {
     const hoy = hoyISO(0);
-    const ultima = localStorage.getItem('signova_racha_fecha');
-    let count = num('signova_racha_count');
+    const ultima = localStorage.getItem('HANDNOVA_racha_fecha');
+    let count = num('HANDNOVA_racha_count');
     if (ultima !== hoy) {
       const ayer = hoyISO(-1);
       count = (ultima === ayer) ? count + 1 : 1;
-      localStorage.setItem('signova_racha_fecha', hoy);
-      localStorage.setItem('signova_racha_count', String(count));
+      localStorage.setItem('HANDNOVA_racha_fecha', hoy);
+      localStorage.setItem('HANDNOVA_racha_count', String(count));
     }
     return count;
   }
 
-  /* ---- Días en SIGNOVA: cuenta días reales de conexión, no tiempo
+  /* ---- Días en HANDNOVA: cuenta días reales de conexión, no tiempo
      transcurrido. Se llama en cada carga de página. ----------------------- */
   function registrarDiaConexion() {
     const hoy = hoyISO(0);
-    const dias = arr('signova_dias_conectado');
+    const dias = arr('HANDNOVA_dias_conectado');
     if (dias.indexOf(hoy) === -1) {
       dias.push(hoy);
-      localStorage.setItem('signova_dias_conectado', JSON.stringify(dias));
+      localStorage.setItem('HANDNOVA_dias_conectado', JSON.stringify(dias));
       return true; // fue un día nuevo
     }
     return false;
@@ -112,10 +112,10 @@
 
   /* ---- Categorías visitadas / uso del buscador ------------------------ */
   function registrarVisitaCategoria(nombre) {
-    const arreglo = arr('signova_categorias_visitadas');
+    const arreglo = arr('HANDNOVA_categorias_visitadas');
     if (arreglo.indexOf(nombre) === -1) {
       arreglo.push(nombre);
-      localStorage.setItem('signova_categorias_visitadas', JSON.stringify(arreglo));
+      localStorage.setItem('HANDNOVA_categorias_visitadas', JSON.stringify(arreglo));
     }
   }
 
@@ -138,8 +138,8 @@
 
   /* Se llama desde buscar.html cuando SÍ se encuentra una seña. */
   function registrarBusqueda(palabra) {
-    const yaUsado = localStorage.getItem('signova_uso_buscador') === '1';
-    localStorage.setItem('signova_uso_buscador', '1');
+    const yaUsado = localStorage.getItem('HANDNOVA_uso_buscador') === '1';
+    localStorage.setItem('HANDNOVA_uso_buscador', '1');
     if (!yaUsado) {
       const { nuevos } = evaluarLogros();
       nuevos.forEach(mostrarToastLogro);
@@ -150,10 +150,10 @@
 
   /* ---- Historial unificado (Actividad reciente) ------------------------ */
   function registrarHistorial(icon, texto, valor) {
-    const h = arr('signova_historial');
+    const h = arr('HANDNOVA_historial');
     h.push({ icon, texto, valor, fechaISO: hoyISO(0) });
     if (h.length > 25) h.shift();
-    localStorage.setItem('signova_historial', JSON.stringify(h));
+    localStorage.setItem('HANDNOVA_historial', JSON.stringify(h));
   }
 
   /* Punto de entrada único para "terminar un quiz o un juego": sube la
@@ -175,9 +175,9 @@
     'quiz_best', 'quiz_score', 'quiz_played', 'games_played',
     'contrarreloj_best', 'contrarreloj_combo_max',
     'deletreo_best', 'deletreo_jugadas',
-    'signova_historial', 'signova_categorias_visitadas', 'signova_uso_buscador',
-    'signova_racha_count', 'signova_racha_fecha', 'signova_logros_desbloqueados',
-    'signova_dias_conectado',
+    'HANDNOVA_historial', 'HANDNOVA_categorias_visitadas', 'HANDNOVA_uso_buscador',
+    'HANDNOVA_racha_count', 'HANDNOVA_racha_fecha', 'HANDNOVA_logros_desbloqueados',
+    'HANDNOVA_dias_conectado',
   ];
   function limpiarProgresoLocal() {
     LLAVES_PROGRESO.forEach(k => localStorage.removeItem(k));
@@ -186,18 +186,18 @@
   /* ---- Evaluación de logros + detección de "nuevos" -------------------- */
   function evaluarLogros() {
     const stats = obtenerStats();
-    const previos = arr('signova_logros_desbloqueados');
+    const previos = arr('HANDNOVA_logros_desbloqueados');
     const resultado = LOGROS.map(l => ({ ...l, desbloqueado: !!l.check(stats) }));
     const desbloqueadosAhora = resultado.filter(l => l.desbloqueado).map(l => l.id);
     const nuevos = resultado.filter(l => l.desbloqueado && previos.indexOf(l.id) === -1);
-    localStorage.setItem('signova_logros_desbloqueados', JSON.stringify(desbloqueadosAhora));
+    localStorage.setItem('HANDNOVA_logros_desbloqueados', JSON.stringify(desbloqueadosAhora));
     return { resultado, nuevos, stats };
   }
 
   /* ---- Sincronización con Firestore (si hay sesión) --------------------- */
   function sincronizarNube() {
-    if (window.SIGNOVA_CLOUD && window.SIGNOVA_CLOUD.listo) {
-      window.SIGNOVA_CLOUD.subir();
+    if (window.HANDNOVA_CLOUD && window.HANDNOVA_CLOUD.listo) {
+      window.HANDNOVA_CLOUD.subir();
     }
   }
 
@@ -206,7 +206,7 @@
     const slot = document.getElementById('navbar-racha-slot');
     if (!slot) return;
     slot.innerHTML = count > 0
-      ? `<span class="racha-badge navbar-racha" title="Racha de días practicando en SIGNOVA">🔥 ${count} ${count === 1 ? 'día' : 'días'}</span>`
+      ? `<span class="racha-badge navbar-racha" title="Racha de días practicando en HANDNOVA">🔥 ${count} ${count === 1 ? 'día' : 'días'}</span>`
       : '';
   }
 
@@ -223,7 +223,7 @@
   function renderActividadReciente() {
     const lista = document.getElementById('actividad-lista');
     if (!lista) return;
-    const historial = arr('signova_historial').slice(-6).reverse();
+    const historial = arr('HANDNOVA_historial').slice(-6).reverse();
     if (historial.length === 0) {
       lista.innerHTML = `
         <div class="actividad-item">
@@ -264,7 +264,7 @@
 
   /* ---- Modo oscuro (persistente en todo el sitio) ----------------------- */
   function modoOscuroActivo() {
-    return localStorage.getItem('signova_modo_oscuro') === '1';
+    return localStorage.getItem('HANDNOVA_modo_oscuro') === '1';
   }
 
   function aplicarModoOscuro(activo) {
@@ -273,7 +273,7 @@
 
   function alternarModoOscuro() {
     const activo = !modoOscuroActivo();
-    localStorage.setItem('signova_modo_oscuro', activo ? '1' : '0');
+    localStorage.setItem('HANDNOVA_modo_oscuro', activo ? '1' : '0');
     aplicarModoOscuro(activo);
     return activo;
   }
@@ -298,7 +298,7 @@
 
   /* ---- Etiqueta de nombre de usuario en el navbar ----------------------- */
   function actualizarEtiquetaCuenta() {
-    const sesion = JSON.parse(localStorage.getItem('signova_sesion') || 'null');
+    const sesion = JSON.parse(localStorage.getItem('HANDNOVA_sesion') || 'null');
     const label = document.getElementById('nav-cuenta-label');
     if (sesion && label) label.textContent = sesion.nombre.split(' ')[0];
   }
@@ -325,7 +325,7 @@
      También reintentamos "hoy me conecté" por si el día de hoy se había
      registrado localmente ANTES de que llegaran los datos de la nube
      (la fusión pudo haber traído un arreglo de días sin el de hoy). */
-  document.addEventListener('signova:cloud-listo', function () {
+  document.addEventListener('HANDNOVA:cloud-listo', function () {
     const esDiaNuevo = registrarDiaConexion();
     evaluarLogros();
     renderTodo();
@@ -334,7 +334,7 @@
   });
 
   /* ---- API pública ---------------------------------------------------- */
-  window.SIGNOVA = {
+  window.HANDNOVA = {
     LOGROS,
     obtenerStats,
     calcularXP,

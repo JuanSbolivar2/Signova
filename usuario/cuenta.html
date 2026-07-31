@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIGNOVA — Mi Cuenta</title>
+  <title>HANDNOVA — Mi Cuenta</title>
   <link rel="stylesheet" href="../assets/css/styles.css">
   <style>
     .cuenta-page {
@@ -316,7 +316,7 @@
 
   <nav class="navbar">
     <a href="../index.html" class="logo">
-      <span class="logo-s">S</span><span class="logo-ig">IG</span><span class="logo-no">NO</span><span class="logo-va">VA</span>
+      <span class="logo-s">H</span><span class="logo-ig">AND</span><span class="logo-no">NO</span><span class="logo-va">VA</span>
     </a>
     <ul class="nav-links">
       <li><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></a></li>
@@ -386,7 +386,7 @@
         <div class="perfil-stat-card">
           <span class="perfil-stat-icon"></span>
           <div class="perfil-stat-num" id="stat-dias">1</div>
-          <div class="perfil-stat-label">Días en SIGNOVA</div>
+          <div class="perfil-stat-label">Días en HANDNOVA</div>
         </div>
       </div>
 
@@ -394,7 +394,7 @@
       <div class="perfil-section">
         <div class="perfil-section-title">📋 Actividad reciente</div>
         <div class="actividad-list" id="actividad-lista">
-          <!-- Se llena dinámicamente desde gamification.js (SIGNOVA.renderTodo) -->
+          <!-- Se llena dinámicamente desde gamification.js (HANDNOVA.renderTodo) -->
         </div>
       </div>
 
@@ -442,7 +442,7 @@
         <!-- LOGIN -->
         <div class="tab-panel active" id="panel-login">
           <h2>Bienvenido</h2>
-          <p class="subtitulo">Inicia sesión para continuar en SIGNOVA.</p>
+          <p class="subtitulo">Inicia sesión para continuar en HANDNOVA.</p>
           <div class="alert alert-error" id="login-error"></div>
           <div class="campo"><input type="email"    id="login-correo" placeholder="Correo electrónico" autocomplete="email"></div>
           <div class="campo"><input type="password" id="login-pass"   placeholder="Contraseña" autocomplete="current-password"></div>
@@ -454,7 +454,7 @@
         <!-- REGISTRO -->
         <div class="tab-panel" id="panel-registro">
           <h2>Crear cuenta</h2>
-          <p class="subtitulo">Únete a SIGNOVA y empieza a aprender LSC hoy.</p>
+          <p class="subtitulo">Únete a HANDNOVA y empieza a aprender LSC hoy.</p>
           <div class="alert alert-error"   id="registro-error"></div>
           <div class="alert alert-success" id="registro-exito"></div>
           <div class="campo"><input type="text"     id="reg-nombre"    placeholder="Nombre completo" autocomplete="name"></div>
@@ -561,13 +561,13 @@
         if (label) label.textContent = 'Cuenta';
       }
       const toggleOscuro = document.getElementById('toggle-modo-oscuro');
-      if (toggleOscuro && window.SIGNOVA) {
-        toggleOscuro.classList.toggle('on', window.SIGNOVA.modoOscuroActivo());
+      if (toggleOscuro && window.HANDNOVA) {
+        toggleOscuro.classList.toggle('on', window.HANDNOVA.modoOscuroActivo());
       }
     });
 
     function alternarOscuro() {
-      const activo = window.SIGNOVA.alternarModoOscuro();
+      const activo = window.HANDNOVA.alternarModoOscuro();
       document.getElementById('toggle-modo-oscuro').classList.toggle('on', activo);
     }
 
@@ -576,9 +576,9 @@
       document.getElementById('perfil-correo').textContent = sesion.correo;
       document.getElementById('perfil-avatar').textContent = sesion.nombre.charAt(0).toUpperCase();
       // Las estadísticas (racha, quiz, partidas, días, actividad reciente)
-      // las pinta gamification.js de forma centralizada vía SIGNOVA.renderTodo(),
+      // las pinta gamification.js de forma centralizada vía HANDNOVA.renderTodo(),
       // tanto al cargar la página como cuando cloud-sync.js confirma la sesión.
-      if (window.SIGNOVA) SIGNOVA.renderTodo();
+      if (window.HANDNOVA) HANDNOVA.renderTodo();
     }
 
     function actualizarNavLabel(nombreCompleto) {

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   cloud-sync.js — SIGNOVA
+   cloud-sync.js — HANDNOVA
    Puente entre Firebase (Auth + Firestore) y el resto del sitio.
 
    Por qué existe como archivo aparte:
@@ -14,9 +14,9 @@
       usuarios/{uid} en Firestore, y con eso "actualiza" el localStorage
       de ESTE dispositivo para que coincida con lo guardado en la nube
       (así, si jugó desde el celular, acá en el PC también lo ve).
-   3. Expone window.SIGNOVA_CLOUD.subir() para que gamification.js pueda
+   3. Expone window.HANDNOVA_CLOUD.subir() para que gamification.js pueda
       empujar cambios hacia Firestore cada vez que algo cambia localmente.
-   4. Dispara el evento "signova:cloud-listo" para que gamification.js
+   4. Dispara el evento "HANDNOVA:cloud-listo" para que gamification.js
       vuelva a pintar la pantalla con los datos ya sincronizados.
 
    Si Firestore todavía no está activado en la consola de Firebase, los
@@ -39,13 +39,13 @@ const CAMPOS = {
   deletreo_best:            'deletreo_best',
   contrarreloj_best:        'contrarreloj_best',
   contrarreloj_combo_max:   'contrarreloj_combo_max',
-  racha_count:              'signova_racha_count',
-  racha_fecha:              'signova_racha_fecha',
-  categorias_visitadas:     'signova_categorias_visitadas',   // JSON array
-  dias_conectado:           'signova_dias_conectado',         // JSON array
-  uso_buscador:             'signova_uso_buscador',           // '1' / ausente
-  logros_desbloqueados:     'signova_logros_desbloqueados',   // JSON array
-  historial:                'signova_historial',              // JSON array
+  racha_count:              'HANDNOVA_racha_count',
+  racha_fecha:              'HANDNOVA_racha_fecha',
+  categorias_visitadas:     'HANDNOVA_categorias_visitadas',   // JSON array
+  dias_conectado:           'HANDNOVA_dias_conectado',         // JSON array
+  uso_buscador:             'HANDNOVA_uso_buscador',           // '1' / ausente
+  logros_desbloqueados:     'HANDNOVA_logros_desbloqueados',   // JSON array
+  historial:                'HANDNOVA_historial',              // JSON array
 };
 
 function docPorDefecto() {
@@ -127,11 +127,11 @@ async function subirANube() {
   try {
     await setDoc(doc(db, 'usuarios', uidActual), statsLocalesActuales(), { merge: true });
   } catch (err) {
-    console.warn('SIGNOVA: no se pudo sincronizar con Firestore todavía.', err.message);
+    console.warn('HANDNOVA: no se pudo sincronizar con Firestore todavía.', err.message);
   }
 }
 
-window.SIGNOVA_CLOUD = {
+window.HANDNOVA_CLOUD = {
   listo: false,
   usuario: null,
   subir: subirANube,
@@ -142,39 +142,39 @@ onAuthStateChanged(auth, async (user) => {
     // Si el progreso guardado en este navegador pertenece a OTRA cuenta
     // (alguien cerró sesión sin limpiar, o cambió de usuario), lo borramos
     // antes de fusionar para que la cuenta nueva no "herede" datos ajenos.
-    const uidLocalPrevio = localStorage.getItem('signova_uid_local');
-    if (uidLocalPrevio && uidLocalPrevio !== user.uid && window.SIGNOVA) {
-      window.SIGNOVA.limpiarProgresoLocal();
+    const uidLocalPrevio = localStorage.getItem('HANDNOVA_uid_local');
+    if (uidLocalPrevio && uidLocalPrevio !== user.uid && window.HANDNOVA) {
+      window.HANDNOVA.limpiarProgresoLocal();
     }
     try {
       await cargarYFusionar(user.uid, user.displayName || 'Usuario', user.email);
       uidActual = user.uid;
-      window.SIGNOVA_CLOUD.listo = true;
-      window.SIGNOVA_CLOUD.usuario = { uid: user.uid, nombre: user.displayName || 'Usuario', correo: user.email };
+      window.HANDNOVA_CLOUD.listo = true;
+      window.HANDNOVA_CLOUD.usuario = { uid: user.uid, nombre: user.displayName || 'Usuario', correo: user.email };
     } catch (err) {
       // Firestore puede no estar activado todavía en la consola: seguimos
       // en modo local sin romper la página.
-      console.warn('SIGNOVA: Firestore no disponible todavía, usando datos locales.', err.message);
+      console.warn('HANDNOVA: Firestore no disponible todavía, usando datos locales.', err.message);
       uidActual = null;
-      window.SIGNOVA_CLOUD.listo = false;
-      window.SIGNOVA_CLOUD.usuario = null;
+      window.HANDNOVA_CLOUD.listo = false;
+      window.HANDNOVA_CLOUD.usuario = null;
     }
-    localStorage.setItem('signova_uid_local', user.uid);
-    localStorage.setItem('signova_sesion', JSON.stringify({
+    localStorage.setItem('HANDNOVA_uid_local', user.uid);
+    localStorage.setItem('HANDNOVA_sesion', JSON.stringify({
       nombre: user.displayName || 'Usuario', correo: user.email
     }));
   } else {
     // Al cerrar sesión, el progreso que queda en este navegador "pertenecía"
     // a la cuenta que se fue: lo borramos para que no se filtre a la
     // siguiente persona que use este mismo navegador/dispositivo.
-    if (localStorage.getItem('signova_uid_local') && window.SIGNOVA) {
-      window.SIGNOVA.limpiarProgresoLocal();
+    if (localStorage.getItem('HANDNOVA_uid_local') && window.HANDNOVA) {
+      window.HANDNOVA.limpiarProgresoLocal();
     }
-    localStorage.removeItem('signova_uid_local');
+    localStorage.removeItem('HANDNOVA_uid_local');
     uidActual = null;
-    window.SIGNOVA_CLOUD.listo = false;
-    window.SIGNOVA_CLOUD.usuario = null;
-    localStorage.removeItem('signova_sesion');
+    window.HANDNOVA_CLOUD.listo = false;
+    window.HANDNOVA_CLOUD.usuario = null;
+    localStorage.removeItem('HANDNOVA_sesion');
   }
-  document.dispatchEvent(new CustomEvent('signova:cloud-listo', { detail: { conSesion: !!user } }));
+  document.dispatchEvent(new CustomEvent('HANDNOVA:cloud-listo', { detail: { conSesion: !!user } }));
 });
