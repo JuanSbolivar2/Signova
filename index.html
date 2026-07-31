@@ -109,6 +109,13 @@
       align-self: center;
     }
 
+    /* Ajuste local: el grid de info-card es de 4 columnas por defecto (styles.css),
+       pero en esta página ahora solo hay 3 tarjetas. */
+    .info-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    @media (max-width: 768px) {
+      .info-grid { grid-template-columns: 1fr !important; }
+    }
+
     /* ---- ONDA SVG separadora entre secciones ---- */
     .wave-sep {
       display: block;
@@ -215,7 +222,11 @@
   <nav class="navbar">
     <!-- Logo: cada letra en su span para aplicar colores distintos -->
     <a href="index.html" class="logo">
+<<<<<<< HEAD
       <span class="logo-s">H</span><span class="logo-ig">AND</span><span class="logo-no">NO</span><span class="logo-va">VA</span>
+=======
+      <span class="logo-s">HA</span><span class="logo-ig">ND</span><span class="logo-no">NO</span><span class="logo-va">VA</span>
+>>>>>>> f7f3227 ( Cambios informacion)
     </a>
 
     <!-- Menú de navegación -->
@@ -288,24 +299,6 @@
     -->
     <a href="lecciones/categorias.html" class="btn-primary">Comenzar ahora</a>
 
-    <!-- Estadísticas numéricas debajo del botón (se animan al cargar) -->
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num" data-target="500" data-suffix="K+">0</div>
-        <div class="stat-label">Personas sordas en Colombia</div>
-      </div>
-      <div class="stat-sep"></div>
-      <div class="stat-item">
-        <div class="stat-num" data-target="10" data-suffix="">0</div>
-        <div class="stat-label">Categorías de aprendizaje</div>
-      </div>
-      <div class="stat-sep"></div>
-      <div class="stat-item">
-        <div class="stat-num" data-target="100" data-suffix="%">0</div>
-        <div class="stat-label">Gratuito y accesible</div>
-      </div>
-    </div>
-
     <div class="blob-decorativo" style="top:10%; left:6%; width:180px; height:180px; background:var(--cyan);"></div>
     <div class="blob-decorativo" style="bottom:5%; right:8%; width:220px; height:220px; background:var(--magenta); animation-delay:2s;"></div>
 
@@ -322,17 +315,20 @@
           <div class="info-card-label">personas con discapacidad auditiva en Colombia</div>
         </div>
         <div class="info-card fade-up">
-          <div class="info-card-num">300+</div>
-          <div class="info-card-label">lenguas de señas en el mundo</div>
+          <div class="info-card-num">2.000+</div>
+          <div class="info-card-label">personas con discapacidad auditiva en la provincia del Sumapaz (estimado)</div>
         </div>
         <div class="info-card fade-up">
           <div class="info-card-num">1996</div>
           <div class="info-card-label">año en que Colombia reconoció la LSC oficialmente</div>
         </div>
+<<<<<<< HEAD
         <div class="info-card fade-up">
           <div class="info-card-num">10</div>
           <div class="info-card-label">categorías disponibles en HANDNOVA</div>
         </div>
+=======
+>>>>>>> f7f3227 ( Cambios informacion)
       </div>
 
       <div class="texto-bloque fade-up">
