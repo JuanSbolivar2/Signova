@@ -996,3 +996,51 @@ body.modo-oscuro footer {
 }
 
 body.modo-oscuro .video-wrapper { background-color: #000; }
+
+/* Boton hamburguesa (oculto en escritorio) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+.nav-toggle svg {
+  width: 26px;
+  height: 26px;
+  stroke: var(--morado);
+}
+
+@media (max-width: 768px) {
+  .nav-toggle { display: block; }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    gap: 0;
+    padding: 10px 0;
+    box-shadow: var(--sombra-sm);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+  }
+  .nav-links.nav-open { display: flex; }
+
+  .nav-links a span { display: inline; }
+  .nav-links li { width: 100%; }
+  .nav-links a {
+    width: 100%;
+    border-radius: 0;
+    padding: 12px 20px;
+  }
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    display: block;
+    width: 100%;
+    padding-left: 20px;
+  }
+}
