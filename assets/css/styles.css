@@ -1036,11 +1036,15 @@ body.modo-oscuro .video-wrapper { background-color: #000; }
     border-radius: 0;
     padding: 12px 20px;
   }
+  .dropdown > a { display: none; }
   .dropdown-menu {
     position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
     box-shadow: none;
     display: block;
     width: 100%;
-    padding-left: 20px;
+    padding-left: 0;
   }
 }
