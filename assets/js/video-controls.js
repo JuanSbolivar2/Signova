@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('video[controls]').forEach(function (video) {
     video.removeAttribute('controls');
     video.muted = true;
+    video.addEventListener('loadedmetadata', function () {
+    video.currentTime = 0.01;
+    },  { once: true });
+    
 
     var container = video.closest('.video-wrapper') || video.parentNode;
 
