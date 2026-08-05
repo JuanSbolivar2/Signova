@@ -9,7 +9,7 @@
 
 .abc-seccion{
     width:100%;
-    max-width:1600px;
+    max-width:1400px;
     margin:auto;
     padding:30px 40px 80px;
 }
@@ -17,160 +17,122 @@
 .grid-abc{
     display:grid;
 
-    /* 4 videos por fila */
-    grid-template-columns:repeat(4,1fr);
+    /* 3 videos por fila en escritorio grande */
+    grid-template-columns:repeat(3,1fr);
 
-    gap:30px;
+    gap:45px 40px;
 }
 
 .abc-card{
-
     background:#fff;
-
     border-radius:18px;
-
     overflow:hidden;
-
     transition:.25s;
-
     box-shadow:0 10px 25px rgba(0,0,0,.08);
-
     cursor:pointer;
-
+    position:relative;
 }
 
 .abc-card:hover{
-
     transform:translateY(-8px);
-
     box-shadow:0 20px 40px rgba(0,0,0,.15);
-
 }
 
 .abc-video-wrapper{
-
     width:100%;
-
-    height:220px;
-
+    height:280px;
     background:#000;
-
     overflow:hidden;
-
     position:relative;
-
 }
 
 .abc-video-wrapper video{
-
     width:100%;
-
     height:100%;
-
     object-fit:cover;
-
 }
 
 .abc-label{
-
-    padding:18px;
-
+    padding:22px;
     text-align:center;
-
     font-size:40px;
-
     font-weight:700;
-
 }
 
 .abc-card::after{
-
     content:"▶";
-
     position:absolute;
-
     left:50%;
-
-    top:110px;
-
+    top:140px;
     transform:translate(-50%,-50%);
-
     width:70px;
-
     height:70px;
-
     border-radius:50%;
-
     background:rgba(0,0,0,.45);
-
     color:white;
-
     font-size:30px;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     pointer-events:none;
-
 }
 
-.abc-card{
-
-    position:relative;
-
-}
-
-/* Laptop */
-
+/* Laptop / pantallas medianas */
 @media(max-width:1400px){
-
-.grid-abc{
-
-grid-template-columns:repeat(3,1fr);
-
+.abc-seccion{
+    padding:30px 30px 80px;
 }
-
+.grid-abc{
+    grid-template-columns:repeat(2,1fr);
+    gap:35px;
+}
 }
 
 /* Tablet */
-
 @media(max-width:900px){
-
 .grid-abc{
-
-grid-template-columns:repeat(2,1fr);
-
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
 }
-
+.abc-video-wrapper{
+    height:240px;
+}
+.abc-card::after{
+    top:120px;
+}
+.abc-label{
+    font-size:34px;
+    padding:16px;
+}
 }
 
 /* Celular */
-
 @media(max-width:600px){
-
+.abc-seccion{
+    padding:20px 16px 60px;
+}
 .grid-abc{
-
-grid-template-columns:1fr;
-
+    grid-template-columns:1fr;
+    gap:22px;
 }
-
 .abc-video-wrapper{
-
-height:240px;
-
+    height:260px;
 }
-
+.abc-card::after{
+    top:130px;
+    width:60px;
+    height:60px;
+    font-size:26px;
+}
+.abc-label{
+    font-size:32px;
+    padding:16px;
+}
 }
 
 body.modo-oscuro .abc-card{
-
-background:#202431;
-
-border:1px solid #313646;
-
+    background:#202431;
+    border:1px solid #313646;
 }
 
 </style>
