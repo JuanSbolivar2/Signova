@@ -5,54 +5,175 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Abecedario — HANDNOVA</title>
   <link rel="stylesheet" href="../assets/css/styles.css">
-  <style>
-    /* Grid compacto para las 27 letras: recuadros más pequeños que los de una categoría normal */
-    .abc-seccion { padding: 0 5% 80px; max-width: 1200px; margin: 0 auto; }
-    .grid-abc {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 14px;
-    }
-    .abc-card {
-      background-color: white;
-      border-radius: var(--radio-md);
-      overflow: hidden;
-      border: 1px solid #eee;
-      box-shadow: var(--sombra-sm);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .abc-card:hover { transform: translateY(-4px); box-shadow: var(--sombra-md); }
-    .abc-video-wrapper {
-      width: 100%;
-      height: 110px;
-      background-color: #111;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .abc-video-wrapper video {
-      width: 100%; height: 100%; max-width: 100%; max-height: 100%;
-      object-fit: contain; display: block;
-    }
-    .abc-label {
-      text-align: center;
-      padding: 8px 6px;
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--negro);
-      font-family: var(--font-titulos, 'Outfit', sans-serif);
-    }
-    @media (max-width: 700px) {
-      .grid-abc { grid-template-columns: repeat(auto-fill, minmax(95px, 1fr)); gap: 10px; }
-      .abc-video-wrapper { height: 90px; }
-    }
-    /* Ya cubierto por las reglas globales de modo oscuro (.video-wrapper);
-       replicamos el fondo negro fijo del wrapper para .abc-video-wrapper */
-    body.modo-oscuro .abc-video-wrapper { background-color: #000; }
-    body.modo-oscuro .abc-card { background-color: #1a1d27; border-color: #2a2e3b; color: var(--negro); }
-  </style>
+<style>
+
+.abc-seccion{
+    width:100%;
+    max-width:1600px;
+    margin:auto;
+    padding:30px 40px 80px;
+}
+
+.grid-abc{
+    display:grid;
+
+    /* 4 videos por fila */
+    grid-template-columns:repeat(4,1fr);
+
+    gap:30px;
+}
+
+.abc-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.25s;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    cursor:pointer;
+
+}
+
+.abc-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 40px rgba(0,0,0,.15);
+
+}
+
+.abc-video-wrapper{
+
+    width:100%;
+
+    height:220px;
+
+    background:#000;
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+.abc-video-wrapper video{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+.abc-label{
+
+    padding:18px;
+
+    text-align:center;
+
+    font-size:40px;
+
+    font-weight:700;
+
+}
+
+.abc-card::after{
+
+    content:"▶";
+
+    position:absolute;
+
+    left:50%;
+
+    top:110px;
+
+    transform:translate(-50%,-50%);
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    background:rgba(0,0,0,.45);
+
+    color:white;
+
+    font-size:30px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    pointer-events:none;
+
+}
+
+.abc-card{
+
+    position:relative;
+
+}
+
+/* Laptop */
+
+@media(max-width:1400px){
+
+.grid-abc{
+
+grid-template-columns:repeat(3,1fr);
+
+}
+
+}
+
+/* Tablet */
+
+@media(max-width:900px){
+
+.grid-abc{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+/* Celular */
+
+@media(max-width:600px){
+
+.grid-abc{
+
+grid-template-columns:1fr;
+
+}
+
+.abc-video-wrapper{
+
+height:240px;
+
+}
+
+}
+
+body.modo-oscuro .abc-card{
+
+background:#202431;
+
+border:1px solid #313646;
+
+}
+
+</style>
 </head>
 <body>
 
@@ -79,12 +200,26 @@
 <div style="height:3px;background:linear-gradient(90deg,var(--magenta),#a855f7,var(--cyan))"></div>
 
 <div class="cat-header">
-  <a href="../index.html" class="btn-back">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-    Volver al inicio
-  </a>
-  <h1>Abecedario</h1>
-  <p>Todas las letras del alfabeto en Lengua de Señas Colombiana, de la A a la Z. Toca el video de cada letra para ver cómo se hace.</p>
+
+<a href="../index.html" class="btn-back">
+
+← Volver al inicio
+
+</a>
+
+<h1 style="font-size:72px;margin-top:25px;">
+
+Abecedario
+
+</h1>
+
+<p style="font-size:23px;max-width:900px;margin:auto;line-height:1.8;">
+
+Aprende cada letra del alfabeto en Lengua de Señas Colombiana.
+Selecciona cualquier tarjeta para reproducir el video de la seña correspondiente.
+
+</p>
+
 </div>
 
 <div class="abc-seccion">
