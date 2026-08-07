@@ -59,24 +59,6 @@
     font-weight:700;
 }
 
-.abc-card::after{
-    content:"▶";
-    position:absolute;
-    left:50%;
-    top:140px;
-    transform:translate(-50%,-50%);
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    background:rgba(0,0,0,.45);
-    color:white;
-    font-size:30px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    pointer-events:none;
-}
-
 /* Laptop / pantallas medianas */
 @media(max-width:1400px){
 .abc-seccion{
@@ -97,9 +79,6 @@
 .abc-video-wrapper{
     height:240px;
 }
-.abc-card::after{
-    top:120px;
-}
 .abc-label{
     font-size:34px;
     padding:16px;
@@ -117,12 +96,6 @@
 }
 .abc-video-wrapper{
     height:260px;
-}
-.abc-card::after{
-    top:130px;
-    width:60px;
-    height:60px;
-    font-size:26px;
 }
 .abc-label{
     font-size:32px;
